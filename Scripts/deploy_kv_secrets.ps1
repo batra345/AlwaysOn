@@ -7,7 +7,10 @@ param
    [System.String]$ParametersFile,
 
    [Parameter(Mandatory=$true)]
-   [System.String]$ResourceGroupParametersFile
+   [System.String]$ResourceGroupParametersFile,
+
+   [Parameter(Mandatory=$true)]
+   [System.String]$DeploymentName
 
 )
 
@@ -32,7 +35,7 @@ if ($null -eq $objKeyVault)
    Write-Output 'Start deploying the Azure KeyVault Resource'
 
    # Start Azure Deployment
-   New-AzResourceGroupDeployment -Name 'CreateKeyVaultResource' -ResourceGroupName $strResourceGroupName -Mode Incremental -TemplateParameterFile $ParametersFile -TemplateFile $TemplateFile -Force -Verbose
+   New-AzResourceGroupDeployment -Name $DeploymentName -ResourceGroupName $strResourceGroupName -Mode Incremental -TemplateParameterFile $ParametersFile -TemplateFile $TemplateFile -Force -Verbose
 
    # Write output
    Write-Output 'Finishing the deployment of the Azure KeyVault Resource'
@@ -54,7 +57,7 @@ if ($null -eq $objKeyVault)
 
       # Create the secret
       Write-Output ('Creating secret ' + $strLocalAdminSecretName + '...')
-      New-AzResourceGroupDeployment -Name 'CreateKeyVaultResource1' -ResourceGroupName $strResourceGroupName -Mode Incremental -TemplateParameterFile $ParametersFile -TemplateFile $TemplateFile -secretName $strLocalAdminSecretName1 -secretValue $sstrLocalAdminPassword -Force -Verbose
+      New-AzResourceGroupDeployment -Name $DeploymentName -ResourceGroupName $strResourceGroupName -Mode Incremental -TemplateParameterFile $ParametersFile -TemplateFile $TemplateFile -secretName $strLocalAdminSecretName1 -secretValue $sstrLocalAdminPassword -Force -Verbose
    }
    else
    {
