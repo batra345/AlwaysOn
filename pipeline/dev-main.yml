@@ -5,7 +5,7 @@ resources:
   repositories:
   - repository: Templates
     type: git
-    name: 'Azure SQLVM Always-On'
+    name: 'AlwaysOn'
 
 variables: 
   paramsroot: $(Pipeline.Workspace)\drop\Parameters
