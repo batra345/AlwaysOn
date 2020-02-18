@@ -57,7 +57,7 @@ if ($null -eq $objKeyVault)
 
       # Create the secret
       Write-Output ('Creating secret ' + $strLocalAdminSecretName + '...')
-      New-AzResourceGroupDeployment -Name $DeploymentName -ResourceGroupName $strResourceGroupName -Mode Incremental -TemplateParameterFile $ParametersFile -TemplateFile $TemplateFile -secretName $strLocalAdminSecretName -secretValue $sstrLocalAdminPassword -Force -Verbose
+      New-AzResourceGroupDeployment -Name $DeploymentName -ResourceGroupName $strResourceGroupName -Mode Incremental -TemplateParameterFile $ParametersFile -TemplateFile $TemplateFile -Name $strLocalAdminSecretName -secretValue $sstrLocalAdminPassword -Force -Verbose
    }
    else
    {
