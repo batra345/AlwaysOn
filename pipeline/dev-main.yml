@@ -64,7 +64,7 @@ stages:
       inputs:
         azureSubscription: 'Azure_test'
         ScriptType: 'FilePath'
-        ScriptPath: ${{ variables.scriptsroot }}\deploy.ps1
+        ScriptPath: ${{ variables.scriptsroot }}\deploy_kv_secrets.ps1
         ScriptArguments: -DeploymentName KeyVault-$(Build.BuildNumber)
                     -TemplateFile ${{ variables.armroot }}\KV\deploy.json
                     -ParametersFile ${{ variables.paramsroot }}\KV\test.parameters.json
