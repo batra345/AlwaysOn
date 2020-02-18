@@ -64,7 +64,7 @@ stages:
       inputs:
         azureSubscription: 'Azure_test'
         ScriptType: 'FilePath'
-        ScriptPath: ${{ variables.scriptsroot }}\deploy_kv_secrets.ps1
+        ScriptPath: ${{ variables.scriptsroot }}\deploy.ps1
         ScriptArguments: -DeploymentName KeyVault-$(Build.BuildNumber)
                     -TemplateFile ${{ variables.armroot }}\KV\deploy.json
                     -ParametersFile ${{ variables.paramsroot }}\KV\test.parameters.json
@@ -72,3 +72,12 @@ stages:
 
         azurePowerShellVersion: LatestVersion
         errorActionPreference: stop
+
+    - task: AzurePowerShell@4
+      inputs:
+        azureSubscription: 'Azure_test'
+        ScriptType: 'FilePath'
+        ScriptPath: ${{ variables.scriptsroot }}\deploy_secrets.ps1
+ 
+      azurePowerShellVersion: LatestVersion
+      errorActionPreference: stop
