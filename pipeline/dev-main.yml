@@ -79,5 +79,5 @@ stages:
         ScriptType: 'FilePath'
         ScriptPath: ${{ variables.scriptsroot }}\deploy_secrets.ps1
  
-      azurePowerShellVersion: LatestVersion
-      errorActionPreference: stop
+        azurePowerShellVersion: LatestVersion
+        errorActionPreference: stop
