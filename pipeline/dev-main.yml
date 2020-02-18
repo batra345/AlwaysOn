@@ -46,59 +46,29 @@ stages:
 
 # Deploy in Azure
 
-- stage: TEST
-  displayName: 'Deploy Always-On'
+- stage: Test_Deploy
   dependsOn:
-  - TEST
+  - Build
   condition: 
-  variables:
-#    azureSubscription: ${{variables.azureSubscription}}
-    environment: 'test'
-
   jobs:
 
-    - job: Deploy KV
-    displayName: 'Deploy Key Vault'
+  - job: Deploy_KeyVault
     condition: 
-    continueOnError: true
     pool:
-      name: Hosted Windows 2019 with VS2019
+      name: Hosted VS2017
     steps:
     - download: current
-      artifact: drop
+      artifact: 'drop'
 
     - task: AzurePowerShell@4
-      displayName: 'Deploy AD'
       inputs:
-        azureSubscription: ${{ variables.azureSubscription }}
+        azureSubscription: 'Azure_test'
         ScriptType: 'FilePath'
-        ScriptPath: $(Pipeline.Workspace)\drop\Scripts\Deploy.ps1
-        ScriptArguments: '-DeploymentName AD-$(Build.BuildNumber)
-                          -TemplateFile ${{ variables.armroot }}\KV\deploy.json
-                          -ParametersFile ${{ variables.paramsroot }}\KV\test.parameters.json
-                          -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\test.parameters.json'
-        azurePowerShellVersion: LatestVersion
-        errorActionPreference: continue
+        ScriptPath: ${{ variables.scriptsroot }}\deploy_kv_secrets.ps1
+        ScriptArguments: -DeploymentName KeyVault-$(Build.BuildNumber)
+                    -TemplateFile ${{ variables.armroot }}\KV\deploy.json
+                    -ParametersFile ${{ variables.paramsroot }}\KV\test.parameters.json
+                    -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\test.parameters.json
 
-  - job: Deploy AD
-    displayName: 'Deploy AD'
-    condition: 
-    continueOnError: true
-    pool:
-      name: Hosted Windows 2019 with VS2019
-    steps:
-    - download: current
-      artifact: drop
-
-    - task: AzurePowerShell@4
-      displayName: 'Deploy AD'
-      inputs:
-        azureSubscription: ${{ variables.azureSubscription }}
-        ScriptType: 'FilePath'
-        ScriptPath: $(Pipeline.Workspace)\drop\Scripts\Deploy.ps1
-        ScriptArguments: '-DeploymentName AD-$(Build.BuildNumber)
-                          -TemplateFile ${{ variables.armroot }}\AD\deploy.json
-                          -ParametersFile ${{ variables.paramsroot }}\AD\test.parameters.json
-                          -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\test.parameters.json'
         azurePowerShellVersion: LatestVersion
-        errorActionPreference: continue
+        errorActionPreference: stop
