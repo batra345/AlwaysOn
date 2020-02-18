@@ -1,0 +1,28 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+      "keyVaultName": {
+        "value": "alwaysonkv01"
+      },
+      "accessPolicies": {
+        "value": [
+            {
+                "tenantId": "f1e1bfe7-0ee3-4b16-ade2-902563794f64",
+                "objectId": "e0a21f6b-5110-4721-972b-cd2bad060f58",
+                "permissions": {
+                    "certificates": [
+                        "All"
+                    ],
+                    "keys": [
+                        "All"
+                    ],
+                    "secrets": [
+                        "All"
+                    ]
+                }
+            }
+        ]    
+      }
+    }
+}
