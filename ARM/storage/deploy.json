@@ -4,7 +4,7 @@
     "parameters": {
       "storageAccountType": {
         "type": "string",
-        "defaultValue": "Standard_LRS",
+        "defaultValue": "standard_LRS",
         "allowedValues": [
           "Standard_LRS",
           "Standard_GRS",
@@ -21,16 +21,20 @@
         "metadata": {
           "description": "Location for all resources."
         }
+      },
+      "storageAccountName": {
+        "type": "string",
+        "metadata": {
+          "description": "Location for all resources."
+        }
       }
     },
-    "variables": {
-      "storageAccountName": "[concat('storge', uniquestring(resourceGroup().id),'sa')]"
-    },
+    "variables": { },
     "resources": [
       {
         "type": "Microsoft.Storage/storageAccounts",
         "apiVersion": "2019-04-01",
-        "name": "[variables('storageAccountName')]",
+        "name": "[parameters('storageAccountName')]",
         "location": "[parameters('location')]",
         "sku": {
           "name": "[parameters('storageAccountType')]"
@@ -42,7 +46,7 @@
     "outputs": {
       "storageAccountName": {
         "type": "string",
-        "value": "[variables('storageAccountName')]"
+        "value": "[parameters('storageAccountName')]"
       }
     }
   }
