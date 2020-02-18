@@ -57,6 +57,29 @@ stages:
 
   jobs:
 
+    - job: Deploy KV
+    displayName: 'Deploy Key Vault'
+    condition: 
+    continueOnError: true
+    pool:
+      name: Hosted Windows 2019 with VS2019
+    steps:
+    - download: current
+      artifact: drop
+
+    - task: AzurePowerShell@4
+      displayName: 'Deploy AD'
+      inputs:
+        azureSubscription: ${{ variables.azureSubscription }}
+        ScriptType: 'FilePath'
+        ScriptPath: $(Pipeline.Workspace)\drop\Scripts\Deploy.ps1
+        ScriptArguments: '-DeploymentName AD-$(Build.BuildNumber)
+                          -TemplateFile ${{ variables.armroot }}\KV\deploy.json
+                          -ParametersFile ${{ variables.paramsroot }}\KV\test.parameters.json
+                          -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\test.parameters.json'
+        azurePowerShellVersion: LatestVersion
+        errorActionPreference: continue
+
   - job: Deploy AD
     displayName: 'Deploy AD'
     condition: 
