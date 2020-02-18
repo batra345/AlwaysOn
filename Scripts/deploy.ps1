@@ -30,6 +30,7 @@ $objResourceGroupParametersFile = Get-Content -Path $ResourceGroupParametersFile
 [System.String] $ResourceGroupName = $objResourceGroupParametersFile.parameters.rgName[0].value
 [System.String] $ResourceGroupLocation = $objResourceGroupParametersFile.parameters.rgLocation[0].value
 
+
 New-AzResourceGroup -Name $ResourceGroupName -Location $ResourceGroupLocation -Force
 
 New-AzResourceGroupDeployment `
