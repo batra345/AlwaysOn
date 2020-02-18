@@ -1,0 +1,81 @@
+trigger: none
+
+# All templates are located in this repository.
+resources:
+  repositories:
+  - repository: Templates
+    type: git
+    name: 'Azure SQLVM Always-On'
+
+variables: 
+  paramsroot: $(Pipeline.Workspace)\drop\Parameters
+  armroot: $(Pipeline.Workspace)\drop\ARM
+  scriptsroot: $(Pipeline.Workspace)\drop\Scripts
+  paramsfileprefix: 'test'
+  environment: 'TEST'
+  azureSubscription: 'Azure_test'
+
+stages:
+# Download the universal packages/ARM templates for pipeline.
+- stage: Build
+  displayName: 'Download Artifacts'
+  jobs:
+  - job: Download_Modules_And_Create_BuildArtifact
+    displayName: "Download ACF Artifacts"
+    pool:
+      name: Hosted Windows 2019 with VS2019
+    continueOnError: 'true'
+
+    steps:
+
+    - task: CopyFiles@2
+      displayName: 'Copy files to: $(build.artifactstagingdirectory)\'
+      inputs:
+        SourceFolder: ''
+        TargetFolder: '$(build.artifactstagingdirectory)'
+        CleanTargetFolder: true
+        OverWrite: true
+
+# All repo files will be used in the deployment. 
+
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Build Artifact'
+      inputs:
+        artifactName: 'drop'
+        pathtoPublish: '$(build.artifactstagingdirectory)'
+
+# Deploy in Azure
+
+- stage: TEST
+  displayName: 'Deploy Always-On'
+  dependsOn:
+  - TEST
+  condition: 
+  variables:
+#    azureSubscription: ${{variables.azureSubscription}}
+    environment: 'test'
+
+  jobs:
+
+  - job: Deploy AD
+    displayName: 'Deploy AD'
+    condition: 
+    continueOnError: true
+    pool:
+      name: Hosted Windows 2019 with VS2019
+    steps:
+    - download: current
+      artifact: drop
+
+    - task: AzurePowerShell@4
+      displayName: 'Deploy AD'
+      inputs:
+        azureSubscription: ${{ variables.azureSubscription }}
+        ScriptType: 'FilePath'
+        ScriptPath: $(Pipeline.Workspace)\drop\Scripts\Deploy.ps1
+        ScriptArguments: '-DeploymentName AD-$(Build.BuildNumber)
+                          -TemplateFile ${{ variables.armroot }}\AD\deploy.json
+                          -ParametersFile ${{ variables.paramsroot }}\AD\test.parameters.json
+                          -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\test.parameters.json'
+        azurePowerShellVersion: LatestVersion
+        errorActionPreference: continue
