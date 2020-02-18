@@ -52,7 +52,7 @@ stages:
   condition: 
   jobs:
 
-  - job: Deploy_KeyVault
+  - job: Deploy
     condition: 
     pool:
       name: Hosted VS2017
