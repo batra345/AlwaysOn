@@ -1,0 +1,68 @@
+param
+(
+   [Parameter(Mandatory=$true)]
+   [System.String]$TemplateFile,
+
+   [Parameter(Mandatory=$true)]
+   [System.String]$ParametersFile,
+
+   [Parameter(Mandatory=$true)]
+   [System.String]$ResourceGroupParametersFile
+
+)
+
+# Declare and define variables
+[System.String] $strLocalAdminSecretName = 'mytope'
+
+# Get Resource Group parameters
+$objResourceGroupParametersFile = Get-Content -Path $ResourceGroupParametersFile | ConvertFrom-Json
+[System.String] $strResourceGroupName = $objResourceGroupParametersFile.parameters.rgName[0].value
+
+# Get the KeyVault Name
+$obKeyVaultParametersFile = Get-Content -Path $ParametersFile | ConvertFrom-Json
+[System.String] $strKeyVaultName = $obKeyVaultParametersFile.parameters.keyVaultName[0].value
+
+# Check if the KeyVault already exists
+Write-Output ('Check if KeyVAult ' + $strKeyVaultName + ' already exists.')
+$objKeyVault = Get-AzKeyVault -VaultName $strKeyVaultName -ResourceGroupName $strResourceGroupName -ErrorAction SilentlyContinue
+
+if ($null -eq $objKeyVault)
+{
+   # Write output
+   Write-Output 'Start deploying the Azure KeyVault Resource'
+
+   # Start Azure Deployment
+   New-AzResourceGroupDeployment -Name 'CreateKeyVaultResource' -ResourceGroupName $strResourceGroupName -Mode Incremental -TemplateParameterFile $ParametersFile -TemplateFile $TemplateFile -Force -Verbose
+
+   # Write output
+   Write-Output 'Finishing the deployment of the Azure KeyVault Resource'
+   Write-Output 'Check or create the secret'
+
+   # Check if the CloudVDIadmin secret already exists
+   $objCloudVDIadminSecret = Get-AzKeyVaultSecret -VaultName $strKeyVaultName -Name $strLocalAdminSecretName -ErrorAction SilentlyContinue
+
+   # Create the KeyVault Secret if required
+   if ($null -eq $objCloudVDIadminSecret)
+   {
+      # Load .NET assembly
+      Add-Type -Assembly 'System.Web'
+
+      # Create a strong password
+      Write-Output ('Generating password...')
+      [System.String] $strLocalAdminPassword = [System.Web.Security.Membership]::GeneratePassword(48, 16)
+      [System.Security.SecureString] $sstrLocalAdminPassword = ConvertTo-SecureString $strLocalAdminPassword -AsPlainText -Force
+
+      # Create the secret
+      Write-Output ('Creating secret ' + $strLocalAdminSecretName + '...')
+      New-AzResourceGroupDeployment -Name 'CreateKeyVaultResource1' -ResourceGroupName $strResourceGroupName -Mode Incremental -TemplateParameterFile $ParametersFile -TemplateFile $TemplateFile -secretName $strLocalAdminSecretName1 -secretValue $sstrLocalAdminPassword -Force -Verbose
+   }
+   else
+   {
+      # Write output
+      Write-Output ('The secret ' + $strLocalAdminSecretName + ' already exists. Will not do anything.')
+   }
+}
+else
+{
+   Write-Output ('KeyVAult ' + $strKeyVaultName + ' already exists. Will not do anything.')
+}
