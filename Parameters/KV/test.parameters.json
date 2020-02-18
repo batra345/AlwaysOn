@@ -21,10 +21,10 @@
         "value": "f1e1bfe7-0ee3-4b16-ade2-902563794f64"
       },
       "keysPermissions": {
-        "value": "all"
+        "value": ["all"]
       },
       "secretsPermissions": {
-        "value": "all"
+        "value": ["all"]
       },
       "skuName": {
         "value": "Standard"
