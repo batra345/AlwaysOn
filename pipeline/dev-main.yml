@@ -100,7 +100,7 @@ stages:
         azureSubscription: 'Azure_test'
         ScriptType: 'FilePath'
         ScriptPath: ${{ variables.scriptsroot }}\deploy.ps1
-        ScriptArguments: -DeploymentName storageAccount-$(Build.BuildNumber)
+        ScriptArguments: -DeploymentName VM-$(Build.BuildNumber)
                     -TemplateFile ${{ variables.armroot }}\VM\deploy.json
                     -ParametersFile ${{ variables.paramsroot }}\VM\test.parameters.json
                     -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\test.parameters.json
