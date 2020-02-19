@@ -94,3 +94,16 @@ stages:
 
         azurePowerShellVersion: LatestVersion
         errorActionPreference: stop
+
+    - task: AzurePowerShell@4
+      inputs:
+        azureSubscription: 'Azure_test'
+        ScriptType: 'FilePath'
+        ScriptPath: ${{ variables.scriptsroot }}\deploy.ps1
+        ScriptArguments: -DeploymentName storageAccount-$(Build.BuildNumber)
+                    -TemplateFile ${{ variables.armroot }}\VM\deploy.json
+                    -ParametersFile ${{ variables.paramsroot }}\VM\test.parameters.json
+                    -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\test.parameters.json
+
+        azurePowerShellVersion: LatestVersion
+        errorActionPreference: stop
