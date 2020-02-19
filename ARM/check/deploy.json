@@ -9,7 +9,7 @@
   "resources": {
       "type": "Microsoft.Storage/storageAccounts",
       "name": "[variables('storageAccountName')]",
-      "location": "WestEurope",
+      "location": "westeurope",
       "sku": {
         "name": "Standard_LRS"
       },
