@@ -4,7 +4,7 @@
   "parameters": {
   },
   "variables": {
-    "storageAccountName": "[concat(uniquestring(resourceGroup().id), 'sawinvm')]"
+    "storageAccountName": "sawinvm"
   },
   "resources": {
       "type": "Microsoft.Storage/storageAccounts",
