@@ -3,13 +3,13 @@
   "contentVersion": "1.0.0.0",
   "parameters": {
     "adminUsername": {
-      "value": "GEN-UNIQUE"
+      "value": "MunnaVM"
     },
     "adminPassword": {
-      "value": "GEN-PASSWORD"
+      "value": "Testing@123456"
     },
     "dnsLabelPrefix": {
-      "value": "GEN-UNIQUE"
+      "value": "MunnaVM"
     }
   }
 }
