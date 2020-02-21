@@ -60,27 +60,27 @@ stages:
     - download: current
       artifact: 'drop'
 
-#    - task: AzurePowerShell@4
-#      inputs:
-#        azureSubscription: 'Azure_test'
-#        ScriptType: 'FilePath'
-#        ScriptPath: ${{ variables.scriptsroot }}\deploy.ps1
-#        ScriptArguments: -DeploymentName KeyVault-$(Build.BuildNumber)
-#                    -TemplateFile ${{ variables.armroot }}\KV\deploy.json
-#                    -ParametersFile ${{ variables.paramsroot }}\KV\test.parameters.json
-#                    -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\test.parameters.json
-#
-#        azurePowerShellVersion: LatestVersion
-#        errorActionPreference: stop
+    - task: AzurePowerShell@4
+      inputs:
+        azureSubscription: 'Azure_test'
+        ScriptType: 'FilePath'
+        ScriptPath: ${{ variables.scriptsroot }}\deploy.ps1
+        ScriptArguments: -DeploymentName KeyVault-$(Build.BuildNumber)
+                    -TemplateFile ${{ variables.armroot }}\KV\deploy.json
+                    -ParametersFile ${{ variables.paramsroot }}\KV\test.parameters.json
+                    -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\test.parameters.json
 
-#    - task: AzurePowerShell@4
-#      inputs:
-#        azureSubscription: 'Azure_test'
-#       ScriptType: 'FilePath'
-#       ScriptPath: ${{ variables.scriptsroot }}\deploy_secrets.ps1
-#
-#       azurePowerShellVersion: LatestVersion
-#       errorActionPreference: stop
+        azurePowerShellVersion: LatestVersion
+        errorActionPreference: stop
+
+    - task: AzurePowerShell@4
+      inputs:
+        azureSubscription: 'Azure_test'
+       ScriptType: 'FilePath'
+       ScriptPath: ${{ variables.scriptsroot }}\deploy_secrets.ps1
+
+       azurePowerShellVersion: LatestVersion
+       errorActionPreference: stop
 
 #    - task: AzurePowerShell@4
 #      inputs:
@@ -108,15 +108,15 @@ stages:
 #        azurePowerShellVersion: LatestVersion
 #        errorActionPreference: stop
 
-    - task: AzurePowerShell@4
-      inputs:
-        azureSubscription: 'Azure_test'
-        ScriptType: 'FilePath'
-        ScriptPath: ${{ variables.scriptsroot }}\deploy.ps1
-        ScriptArguments: -DeploymentName VM-$(Build.BuildNumber)
-                    -TemplateFile ${{ variables.armroot }}\check\deploy.json
-                    -ParametersFile ${{ variables.paramsroot }}\check\test.parameters.json
-                    -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\test.parameters.json
-
-        azurePowerShellVersion: LatestVersion
-        errorActionPreference: stop
+#    - task: AzurePowerShell@4
+#     inputs:
+#       azureSubscription: 'Azure_test'
+#       ScriptType: 'FilePath'
+#       ScriptPath: ${{ variables.scriptsroot }}\deploy.ps1
+#       ScriptArguments: -DeploymentName VM-$(Build.BuildNumber)
+#                   -TemplateFile ${{ variables.armroot }}\check\deploy.json
+#                   -ParametersFile ${{ variables.paramsroot }}\check\test.parameters.json
+#                   -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\test.parameters.json
+#
+#       azurePowerShellVersion: LatestVersion
+#       errorActionPreference: stop
