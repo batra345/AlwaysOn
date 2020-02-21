@@ -75,7 +75,7 @@ stages:
 
     - task: AzurePowerShell@4
       inputs:
-        azureSubscription: 'Azure_test'
+       azureSubscription: 'Azure_test'
        ScriptType: 'FilePath'
        ScriptPath: ${{ variables.scriptsroot }}\deploy_secrets.ps1
 
