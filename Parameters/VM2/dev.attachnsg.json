@@ -9,7 +9,7 @@
             "value": "sqlvm02-nic"
         },
         "NSGname": {
-            "value": "ADDS-nsg"
+            "value": "DB-nsg"
         }
     }
 } 
