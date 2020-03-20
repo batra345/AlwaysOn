@@ -5,17 +5,14 @@ resources:
   repositories:
   - repository: Templates
     type: git
-    name: 'Azure Migration/Azure Migration'
+    name: 'Azure sqlha'
 
 variables: 
-  modulesroot: $(Pipeline.Workspace)\drop\modules
+  armroot: $(Pipeline.Workspace)\drop\ARM
   paramsroot: $(Pipeline.Workspace)\drop\Parameters
-  sqlvm1root: $(Pipeline.Workspace)\drop\SQLVMDNBNOR
-  sqlvm2root: $(Pipeline.Workspace)\drop\SQLVMDNBNOR2
   scriptroot: $(Pipeline.Workspace)\drop\Scripts
-  djoinroot: $(Pipeline.Workspace)\drop\DJOIN
-  paramsfileprefix: 'prod'
-  environment: 'PROD-INFRA'
+  paramsfileprefix: 'dev'
+  environment: 'DEV-SQL'
   azureSubscription: 'Azure_Connection'
 
 stages:
