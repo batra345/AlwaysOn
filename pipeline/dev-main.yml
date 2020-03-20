@@ -60,8 +60,8 @@ stages:
 
   jobs:
 
-  - job: DeploySQLVM
-    displayName: 'Deploy SQLVM'
+  - job: DeploySQLVMALL
+    displayName: 'Deploy SQLVM All'
     condition: 
     continueOnError: true
     pool:
@@ -84,20 +84,37 @@ stages:
         azurePowerShellVersion: LatestVersion
         errorActionPreference: continue
 
+
+    - task: AzurePowerShell@4
+      displayName: 'Deploy SQL VM1'
+      inputs:
+        azureSubscription: ${{ variables.azureSubscription }}
+        ScriptType: 'FilePath'
+        ScriptPath: ${{ variables.scriptroot }}\Deploy.ps1
+        ScriptArguments: '-DeploymentName SQLVM1-$(Build.BuildNumber)
+                          -TemplateFile ${{ variables.armroot }}\VM\deploy.json
+                          -ParametersFile ${{ variables.paramsroot }}\VM1\${{ variables.paramsfileprefix }}.parameters.json
+                          -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\${{ variables.paramsfileprefix }}.parameters.json'
+
+        azurePowerShellVersion: LatestVersion
+        errorActionPreference: continue
+
+
     - task: AzurePowerShell@4
       displayName: 'Deploy SQL VM2'
       inputs:
         azureSubscription: ${{ variables.azureSubscription }}
         ScriptType: 'FilePath'
-        ScriptPath: $(Pipeline.Workspace)\drop\Scripts\Deploy.ps1
-        ScriptArguments: '-DeploymentName SQLVM2-$(Build.BuildNumber)
-                          -TemplateFile ${{ variables.sqlvm2root }}\deploy.json
-                          -ParametersFile ${{ variables.sqlvm2root }}\${{ variables.paramsfileprefix}}.parameters.json
-                          -ResourceGroupParametersFile ${{ variables.sqlvm2root }}\ResourceGroup\${{ variables.paramsfileprefix}}.parameters.json'
+        ScriptPath: ${{ variables.scriptroot }}\Deploy.ps1
+        ScriptArguments: '-DeploymentName SQLVM1-$(Build.BuildNumber)
+                          -TemplateFile ${{ variables.armroot }}\VM\deploy.json
+                          -ParametersFile ${{ variables.paramsroot }}\VM2\${{ variables.paramsfileprefix }}.parameters.json
+                          -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\${{ variables.paramsfileprefix }}.parameters.json'
 
         azurePowerShellVersion: LatestVersion
-        errorActionPreference: continue        
+        errorActionPreference: continue
 
+    
     - task: AzurePowerShell@4
       displayName: 'SQLVM - Associate NSGs VM1'
       inputs:
