@@ -79,7 +79,7 @@ stages:
         ScriptArguments: '-DeploymentName SQLVM1-$(Build.BuildNumber)
                           -TemplateFile ${{ variables.armroot }}\VM\deploy.json
                           -ParametersFile ${{ variables.paramsroot }}\VM1\${{ variables.paramsfileprefix }}.parameters.json
-                          -ResourceGroupParametersFile ${{ variables.sqlvm1root }}\ResourceGroup\${{ variables.paramsfileprefix }}.parameters.json'
+                          -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\${{ variables.paramsfileprefix }}.parameters.json'
 
         azurePowerShellVersion: LatestVersion
         errorActionPreference: continue
