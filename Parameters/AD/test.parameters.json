@@ -1,0 +1,35 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "value": "norwayeast"
+        },
+        "vmList": {
+            "value": "ERFWSVMDB001,ERFWSVMDB002"
+        },
+        "domainJoinUserName": { 
+            "reference": {
+                "keyVault": {
+                "id": "/subscriptions/17c3e3d7-1972-498c-8892-fb9bea337d19/resourceGroups/shared-keyvault-prod-rg/providers/Microsoft.KeyVault/vaults/AZF-DCExt-Spoke1-Prod-kv"
+                },
+            "secretName": "vm-djoin-upn"
+            }
+        },        
+        "domainJoinUserPassword": { 
+            "reference": {
+                "keyVault": {
+                "id": "/subscriptions/17c3e3d7-1972-498c-8892-fb9bea337d19/resourceGroups/shared-keyvault-prod-rg/providers/Microsoft.KeyVault/vaults/AZF-DCExt-Spoke1-Prod-kv"
+                },
+            "secretName": "vm-djoin-pwd"
+            }
+        },
+        "domainFQDN": {
+            "value": "erf01.net"
+        },
+        "ouPath": {
+            "value": "OU=ERF,OU=Windows2019,OU=Servers,DC=ERF01,DC=NET"
+        }
+    }
+}
+
