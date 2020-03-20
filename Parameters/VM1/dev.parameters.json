@@ -2,14 +2,50 @@
   "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
   "contentVersion": "1.0.0.0",
   "parameters": {
+        "tagValues" : {
+            "value": {
+                "RoutineID": "0000",
+                "RoutineName": "SQLVM",
+                "BusinessApplication": "SQLServeronAzureVM",
+                "CostCenter": "BA0000",
+                "Environment" : "DEV"
+            }            
+        }, 
+    "virtualMachineName": {
+      "value": "sqle-d-pri-01"
+    },
     "adminUsername": {
-      "value": "munnavm_345"
+      "value": "sqladmin"
     },
     "adminPassword": {
-      "value": "Testing@123456"
+        "reference": {
+            "keyVault": {
+              "id": "/subscriptions/6d8c5a35-0f1b-4da0-b47d-e5caab3e2b37/resourceGroups/sqlvm-dnbnor-dev-rg/providers/Microsoft.KeyVault/vaults/sqlvm-dev-kv001"
+            },
+            "secretName": "sqladmin"
+        }
     },
-    "dnsLabelPrefix": {
-      "value": "munnavm_345"
-    }
+    "virtualMachineSize": {
+        "value":"Standard_DS13_v2"
+    },
+    "existingVirtualNetworkName": {
+        "value":"dev-Spoke1-Standard-NorE"
+    },
+    "existingSubnetName": {
+        "value": "standard-dnbnor-net"
+    },
+    "imageOffer": {
+        "value":"SQL2017-WS2016"
+    },
+    "sqlSku": {
+        "value":"Enterprise"
+    },
+    "storageWorkloadType": {
+        "value":"General"
+    },
+    "virtualNetworkResourceGroupName": {
+        "value":"networking-dev"
+    }                                   
   }
 }
+
