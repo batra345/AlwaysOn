@@ -1,0 +1,15 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "RGname": {
+            "value": "SQL-HA2"
+        },
+        "NICname": {
+            "value": "sqlvm02-nic"
+        },
+        "NSGname": {
+            "value": "ADDS-nsg"
+        }
+    }
+} 
