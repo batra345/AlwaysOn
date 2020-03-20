@@ -13,16 +13,16 @@ variables:
   scriptroot: $(Pipeline.Workspace)\drop\Scripts
   paramsfileprefix: 'dev'
   environment: 'DEV-SQL'
-  azureSubscription: 'Azure_Connection'
+  azureSubscription: 'Azure_test'
 
 stages:
 # Download the universal packages/ARM templates that is used in the pipeline.
 # Additional templates must be published and included in the template file or directly included in the parameters folder.
 - stage: Build
-  displayName: 'Download Artifacts'
+  displayName: 'Download templates'
   jobs:
-  - job: Download_Modules_And_Create_BuildArtifact
-    displayName: "Download ACF Artifacts"
+  - job: Download_template
+    displayName: "Download template deploy"
     pool:
       name: Hosted Windows 2019 with VS2019
     continueOnError: 'true'
@@ -37,19 +37,6 @@ stages:
         CleanTargetFolder: true
         OverWrite: true
 
-# This is the artifact that contains the template for the basic Azure resources. i.e keyvault, storageaccount, nsg and asg.
-# Remember to update the package version to get the latest version. 
-
-    - task: UniversalPackages@0
-      displayName: 'Get Landing Zone Module'
-      inputs:
-        command: 'download'
-        downloadDirectory: '$(build.artifactstagingdirectory)\Modules\MLZBasicAppInfra'
-        feedsToUse: 'internal'
-        vstsFeed: 'FoundationArtifacts'
-        vstsFeedPackage: 'mlzbasicappinfra'
-        vstsPackageVersion: '0.15.0'
-
 # The application and the modules are packaged together and an artifact to be used in the deployment is created. 
 
     - task: PublishBuildArtifacts@1
@@ -58,62 +45,22 @@ stages:
         artifactName: 'drop'
         pathtoPublish: '$(build.artifactstagingdirectory)'
 
-# Validate that ARM templates are valid. Each module will be syntax tested and security tested. (AzSkKit)
+                  
+                        
+# Run scripts to deploy SQL VMs with HA.
 
-- stage: Validate
-  displayName: 'Validate Templates'
+- stage: DeploySQL
+  displayName: 'Deploy SQL VM'
   dependsOn:
   - Build
   condition: 
-  jobs:
-  - template: .Pipelines/validate_template.yml@Templates
-    parameters:
-      azureSubscription: ${{variables.azureSubscription}}
-      jobname: 'MLZInfraAppModule'
-      scriptPath: '$(Pipeline.Workspace)\drop\modules\mlzbasicappinfra\scripts\Validate.ps1'
-      scriptArguments: '-TemplateFile ${{ variables.modulesroot }}\mlzbasicappinfra\deploy.json 
-                        -ParametersFile ${{ variables.paramsroot }}\mlzbasicappinfra\${{ variables.paramsfileprefix}}.parameters.json'
-
-      azSkarmtemplatefilepath: '${{ variables.modulesroot }}\mlzbasicappinfra\deploy.json'
-      azSkarmTemplateparameterfilepath: '${{ variables.paramsroot }}\${{ variables.paramsfileprefix}}.parameters.json'
-
-# Deploy the ARM templates for the specific environment using deploymentjobs.
-# When using deploymentjobs we can add approval gates to the deployment environment. 
-
-- stage: PROD
-  displayName: 'Deploy Application Infrastructure'
-  dependsOn:
-  - Validate
-  condition: 
-
-  jobs:
-  - template: .Pipelines/deploy_template.yml@Templates
-    parameters:
-      azureSubscription: ${{variables.azureSubscription}}
-      deploymentname: 'DeployMLZInfraModule'
-      environment: ${{ variables.environment }}
-      scriptPath: ${{ variables.modulesroot }}\mlzbasicappinfra\deploy.ps1
-      scriptArguments: '-DeploymentName MlzBasicAppInfra-$(Build.BuildNumber) 
-                        -TemplateFile ${{ variables.modulesroot }}\mlzbasicappinfra\deploy.json 
-                        -ParametersFile ${{ variables.paramsroot }}\mlzbasicappinfra\${{ variables.paramsfileprefix}}.parameters.json'
-
-                     
-                        
-# Run scripts to orchestrate the resources pre- and post VM migration.
-
-- stage: DeploySQL
-  displayName: 'Deploy SQL hotel'
-  dependsOn:
-  - PROD
-  condition: 
   variables:
-#    azureSubscription: ${{variables.azureSubscription}}
-    environment: 'prod'
-    modulename: 'mlzbasicappinfra'
+    environment: 'dev'
+
 
   jobs:
 
-  - job: DeploySQL
+  - job: DeploySQLVM
     displayName: 'Deploy SQLVM'
     condition: 
     continueOnError: true
@@ -123,24 +70,15 @@ stages:
     - download: current
       artifact: drop     
 
-#    - task: AzurePowerShell@4
-#      displayName: 'Add secret to KeyVault'
-#      inputs:
-#        azureSubscription: $(azureSubscription)
-#        ScriptType: 'FilePath'
-#        ScriptPath: $(Pipeline.Workspace)\drop\Scripts\secret.ps1
-#        azurePowerShellVersion: LatestVersion
-#        errorActionPreference: continue
-
     - task: AzurePowerShell@4
       displayName: 'Deploy SQL VM1'
       inputs:
         azureSubscription: ${{ variables.azureSubscription }}
         ScriptType: 'FilePath'
-        ScriptPath: $(Pipeline.Workspace)\drop\Scripts\Deploy.ps1
+        ScriptPath: ${{ variables.scriptroot }}\Deploy.ps1
         ScriptArguments: '-DeploymentName SQLVM1-$(Build.BuildNumber)
-                          -TemplateFile ${{ variables.sqlvm1root }}\deploy.json
-                          -ParametersFile ${{ variables.sqlvm1root }}\${{ variables.paramsfileprefix }}.parameters.json
+                          -TemplateFile ${{ variables.armroot }}\VM\deploy.json
+                          -ParametersFile ${{ variables.paramsroot }}\VM1\${{ variables.paramsfileprefix }}.parameters.json
                           -ResourceGroupParametersFile ${{ variables.sqlvm1root }}\ResourceGroup\${{ variables.paramsfileprefix }}.parameters.json'
 
         azurePowerShellVersion: LatestVersion
