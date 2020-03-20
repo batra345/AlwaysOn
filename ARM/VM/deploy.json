@@ -20,7 +20,7 @@
         },
         "virtualMachineSize": {
             "type": "String",
-            "defaultValue": "Standard_DS13_v2",
+            "defaultValue": "Standard_DS12_v2",
                 "allowedValues": [
                     "Standard_DS13_v2",
                     "Standard_DS3_v2"
@@ -161,7 +161,7 @@
         "storageAccountType": "Premium_LRS",
         "diskSizeGB": 1023
       },
-      "tempDbPath":  "H:\\SQLTemp"
+      "tempDbPath":  "D:\\SQLTemp"
     },
     "resources": [
         {
