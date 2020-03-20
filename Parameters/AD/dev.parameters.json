@@ -3,32 +3,24 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
         "location": {
-            "value": "norwayeast"
+            "value": "westeurope"
         },
         "vmList": {
-            "value": "ERFWSVMDB001,ERFWSVMDB002"
+            "value": "sqlvm01,sqlvm02"
         },
         "domainJoinUserName": { 
-            "reference": {
-                "keyVault": {
-                "id": "/subscriptions/17c3e3d7-1972-498c-8892-fb9bea337d19/resourceGroups/shared-keyvault-prod-rg/providers/Microsoft.KeyVault/vaults/AZF-DCExt-Spoke1-Prod-kv"
-                },
-            "secretName": "vm-djoin-upn"
-            }
+           "value": "adjoin"
         },        
         "domainJoinUserPassword": { 
             "reference": {
                 "keyVault": {
-                "id": "/subscriptions/17c3e3d7-1972-498c-8892-fb9bea337d19/resourceGroups/shared-keyvault-prod-rg/providers/Microsoft.KeyVault/vaults/AZF-DCExt-Spoke1-Prod-kv"
+                "id": "/subscriptions/f1e1bfe7-0ee3-4b16-ade2-902563794f64/resourceGroups/SQL-HA2/providers/Microsoft.KeyVault/vaults/alwaysonkv01"
                 },
-            "secretName": "vm-djoin-pwd"
+            "secretName": "adjoin"
             }
         },
         "domainFQDN": {
-            "value": "erf01.net"
-        },
-        "ouPath": {
-            "value": "OU=ERF,OU=Windows2019,OU=Servers,DC=ERF01,DC=NET"
+           "value": "sqlha.net" 
         }
     }
 }
