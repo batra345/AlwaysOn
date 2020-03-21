@@ -9,7 +9,7 @@
             "value": "sqlvm02-nic"
         },
         "NSGname": {
-            "value": "DB-nsg"
+            "value": "DB-nsg1"
         },
         "RuleName1": {
             "value": "allow-rdp"
