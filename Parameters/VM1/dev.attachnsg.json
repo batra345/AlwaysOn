@@ -10,6 +10,21 @@
         },
         "NSGname": {
             "value": "DB-nsg"
+        },
+        "RuleName1": {
+            "value": "allow-rdp"
+        },
+        "RuleName2": {
+            "value": "allow-adjoin"
+        },
+        "Priority1": {
+            "value": "1000"
+        },
+        "Priority2": {
+            "value": "2000"
+        },                           
+        "Location": {
+            "value": "westeurope"
         }
     }
 } 
