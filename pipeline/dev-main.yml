@@ -158,9 +158,9 @@ stages:
         ScriptType: 'FilePath'
         ScriptPath: ${{ variables.scriptroot }}\deploy.ps1
         ScriptArguments: '-DeploymentName ADjoin-$(Build.BuildNumber)
-                          -TemplateFile ${{ variables.djoinroot }}\deploy.json
-                          -ParametersFile ${{ variables.djoinroot }}\${{ variables.paramsfileprefix}}.parameters.json
-                          -ResourceGroupParametersFile ${{ variables.djoinroot }}\ResourceGroup\${{ variables.paramsfileprefix}}.parameters.json'
+                          -TemplateFile ${{ variables.armroot }}\deploy.json
+                          -ParametersFile ${{ variables.paramsroot }}\${{ variables.paramsfileprefix}}.parameters.json
+                          -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\${{ variables.paramsfileprefix}}.parameters.json'
 
         azurePowerShellVersion: LatestVersion
         errorActionPreference: continue       
