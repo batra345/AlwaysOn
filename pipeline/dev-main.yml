@@ -134,8 +134,8 @@ stages:
       inputs:
         azureSubscription: ${{ variables.azureSubscription }}
         ScriptType: 'FilePath'
-        ScriptPath: ${{ variables.scriptroot }}\attachNSG.ps1
-        Scriptarguments: '-ParametersFile ${{ variables.sqlvm1root }}\${{ variables.paramsfileprefix}}.attachNSGVM1.json'
+        ScriptPath: ${{ variables.scriptroot }}\attach-NSG.ps1
+        Scriptarguments: '-ParametersFile ${{ variables.paramsroot }}\VM1\${{ variables.paramsfileprefix}}.attachnsg.json'
         
         azurePowerShellVersion: LatestVersion
         errorActionPreference: continue
@@ -145,8 +145,8 @@ stages:
       inputs:
         azureSubscription: ${{ variables.azureSubscription }}
         ScriptType: 'FilePath'
-        ScriptPath: ${{ variables.scriptroot }}\attachNSG.ps1
-        Scriptarguments: '-ParametersFile ${{ variables.sqlvm2root }}\${{ variables.paramsfileprefix}}.attachNSGVM2.json'
+        ScriptPath: ${{ variables.scriptroot }}\attach-NSG.ps1
+        Scriptarguments: '-ParametersFile ${{ variables.paramsroot }}\VM2\${{ variables.paramsfileprefix}}.attachnsg.json'
         
         azurePowerShellVersion: LatestVersion
         errorActionPreference: continue        
