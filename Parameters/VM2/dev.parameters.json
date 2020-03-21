@@ -1,0 +1,50 @@
+  {
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+          "tagValues" : {
+              "value": {
+                  "Application": "SQLHAVM",
+                  "CostCODE": "CC0000",
+                  "Environment" : "DEV"
+              }            
+          }, 
+      "virtualMachineName": {
+        "value": "sqlvm02"
+      },
+      "adminUsername": {
+        "value": "sqladmin"
+      },
+      "adminPassword": {
+          "reference": {
+              "keyVault": {
+                "id": "/subscriptions/f1e1bfe7-0ee3-4b16-ade2-902563794f64/resourceGroups/SQL-HA2/providers/Microsoft.KeyVault/vaults/alwaysonkv01"
+              },
+              "secretName": "sqladmin"
+          }
+      },
+      "virtualMachineSize": {
+          "value":"Standard_DS12_v2"
+      },
+      "existingVirtualNetworkName": {
+          "value":"SQL-HA2-vnet"
+      },
+      "existingSubnetName": {
+          "value": "default"
+      },
+      "imageOffer": {
+          "value":"SQL2017-WS2016"
+      },
+      "sqlSku": {
+          "value":"Enterprise"
+      },
+      "storageWorkloadType": {
+          "value":"General"
+      },
+      "virtualNetworkResourceGroupName": {
+          "value":"SQL-HA2"
+      }                                   
+    }
+  }
+  
+  

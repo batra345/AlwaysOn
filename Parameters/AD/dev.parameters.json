@@ -1,0 +1,27 @@
+{
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+        "location": {
+            "value": "westeurope"
+        },
+        "vmList": {
+            "value": "sqlvm01,sqlvm02"
+        },
+        "domainJoinUserName": { 
+           "value": "adjoin"
+        },        
+        "domainJoinUserPassword": { 
+            "reference": {
+                "keyVault": {
+                "id": "/subscriptions/f1e1bfe7-0ee3-4b16-ade2-902563794f64/resourceGroups/SQL-HA2/providers/Microsoft.KeyVault/vaults/alwaysonkv01"
+                },
+            "secretName": "adjoin"
+            }
+        },
+        "domainFQDN": {
+           "value": "sqlha.net" 
+        }
+    }
+}
+

@@ -5,23 +5,24 @@ resources:
   repositories:
   - repository: Templates
     type: git
-    name: 'AlwaysOn'
+    name: 'Azure sqlha'
 
 variables: 
-  paramsroot: $(Pipeline.Workspace)\drop\Parameters
   armroot: $(Pipeline.Workspace)\drop\ARM
-  scriptsroot: $(Pipeline.Workspace)\drop\Scripts
-  paramsfileprefix: 'test'
-  environment: 'TEST'
+  paramsroot: $(Pipeline.Workspace)\drop\Parameters
+  scriptroot: $(Pipeline.Workspace)\drop\Scripts
+  paramsfileprefix: 'dev'
+  environment: 'DEV-SQL'
   azureSubscription: 'Azure_test'
 
 stages:
-# Download the universal packages/ARM templates for pipeline.
+# Download the universal packages/ARM templates that is used in the pipeline.
+# Additional templates must be published and included in the template file or directly included in the parameters folder.
 - stage: Build
-  displayName: 'Download Artifacts'
+  displayName: 'Download templates'
   jobs:
-  - job: Download_Modules_And_Create_BuildArtifact
-    displayName: "Download ACF Artifacts"
+  - job: Download_template
+    displayName: "Download template deploy"
     pool:
       name: Hosted Windows 2019 with VS2019
     continueOnError: 'true'
@@ -29,14 +30,14 @@ stages:
     steps:
 
     - task: CopyFiles@2
-      displayName: 'Copy files to: $(build.artifactstagingdirectory)\'
+      displayName: 'Copy Parameterfiles to: $(build.artifactstagingdirectory)\'
       inputs:
         SourceFolder: ''
         TargetFolder: '$(build.artifactstagingdirectory)'
         CleanTargetFolder: true
         OverWrite: true
 
-# All repo files will be used in the deployment. 
+# The application and the modules are packaged together and an artifact to be used in the deployment is created. 
 
     - task: PublishBuildArtifacts@1
       displayName: 'Publish Build Artifact'
@@ -44,79 +45,123 @@ stages:
         artifactName: 'drop'
         pathtoPublish: '$(build.artifactstagingdirectory)'
 
-# Deploy in Azure
+                  
+                        
+# Run scripts to deploy SQL VMs with HA.
 
-- stage: Test_Deploy
+- stage: DeploySQL
+  displayName: 'Deploy SQL VM'
   dependsOn:
   - Build
   condition: 
+  variables:
+    environment: 'dev'
+
+
   jobs:
 
-  - job: Deploy
+  - job: DeploySQLVMALL
+    displayName: 'Deploy SQLVM All'
     condition: 
+    continueOnError: true
     pool:
-      name: Hosted VS2017
+      name: Hosted Windows 2019 with VS2019
     steps:
     - download: current
-      artifact: 'drop'
-
-#    - task: AzurePowerShell@4
-#      inputs:
-#        azureSubscription: 'Azure_test'
-#        ScriptType: 'FilePath'
-#        ScriptPath: ${{ variables.scriptsroot }}\deploy.ps1
-#        ScriptArguments: -DeploymentName KeyVault-$(Build.BuildNumber)
-#                    -TemplateFile ${{ variables.armroot }}\KV\deploy.json
-#                    -ParametersFile ${{ variables.paramsroot }}\KV\test.parameters.json
-#                    -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\test.parameters.json
-#
-#        azurePowerShellVersion: LatestVersion
-#        errorActionPreference: stop
-
-#    - task: AzurePowerShell@4
-#      inputs:
-#        azureSubscription: 'Azure_test'
-#       ScriptType: 'FilePath'
-#       ScriptPath: ${{ variables.scriptsroot }}\deploy_secrets.ps1
-#
-#       azurePowerShellVersion: LatestVersion
-#       errorActionPreference: stop
-
-#    - task: AzurePowerShell@4
-#      inputs:
-#        azureSubscription: 'Azure_test'
-#        ScriptType: 'FilePath'
-#        ScriptPath: ${{ variables.scriptsroot }}\deploy.ps1
-#        ScriptArguments: -DeploymentName storageAccount-$(Build.BuildNumber)
-#                    -TemplateFile ${{ variables.armroot }}\storage\deploy.json
-#                    -ParametersFile ${{ variables.paramsroot }}\storage\test.parameters.json
-#                    -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\test.parameters.json
-#
-#        azurePowerShellVersion: LatestVersion
-#        errorActionPreference: stop
-
-#    - task: AzurePowerShell@4
-#      inputs:
-#        azureSubscription: 'Azure_test'
-#        ScriptType: 'FilePath'
-#        ScriptPath: ${{ variables.scriptsroot }}\deploy.ps1
-#        ScriptArguments: -DeploymentName VM-$(Build.BuildNumber)
-#                    -TemplateFile ${{ variables.armroot }}\VM\deploy.json
-#                    -ParametersFile ${{ variables.paramsroot }}\VM\test.parameters.json
-#                    -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\test.parameters.json
-#
-#        azurePowerShellVersion: LatestVersion
-#        errorActionPreference: stop
+      artifact: drop     
 
     - task: AzurePowerShell@4
+      displayName: 'Deploy STORAGE ACCOUNT'
       inputs:
-        azureSubscription: 'Azure_test'
+        azureSubscription: ${{ variables.azureSubscription }}
         ScriptType: 'FilePath'
-        ScriptPath: ${{ variables.scriptsroot }}\deploy.ps1
-        ScriptArguments: -DeploymentName VM-$(Build.BuildNumber)
-                    -TemplateFile ${{ variables.armroot }}\check\deploy.json
-                    -ParametersFile ${{ variables.paramsroot }}\check\test.parameters.json
-                    -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\test.parameters.json
+        ScriptPath: ${{ variables.scriptroot }}\Deploy.ps1
+        ScriptArguments: '-DeploymentName SA-$(Build.BuildNumber)
+                          -TemplateFile ${{ variables.armroot }}\storage\deploy.json
+                          -ParametersFile ${{ variables.paramsroot }}\storage\${{ variables.paramsfileprefix }}.parameters.json
+                          -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\${{ variables.paramsfileprefix }}.parameters.json'
 
         azurePowerShellVersion: LatestVersion
-        errorActionPreference: stop
+        errorActionPreference: continue
+
+
+    - task: AzurePowerShell@4
+      displayName: 'Deploy KEY VAULT'
+      inputs:
+        azureSubscription: ${{ variables.azureSubscription }}
+        ScriptType: 'FilePath'
+        ScriptPath: ${{ variables.scriptroot }}\Deploy.ps1
+        ScriptArguments: '-DeploymentName KV-$(Build.BuildNumber)
+                          -TemplateFile ${{ variables.armroot }}\KV\deploy.json
+                          -ParametersFile ${{ variables.paramsroot }}\KV\${{ variables.paramsfileprefix }}.parameters.json
+                          -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\${{ variables.paramsfileprefix }}.parameters.json'
+
+        azurePowerShellVersion: LatestVersion
+        errorActionPreference: continue
+
+    - task: AzurePowerShell@4
+      displayName: 'Deploy SQL VM1'
+      inputs:
+        azureSubscription: ${{ variables.azureSubscription }}
+        ScriptType: 'FilePath'
+        ScriptPath: ${{ variables.scriptroot }}\Deploy.ps1
+        ScriptArguments: '-DeploymentName SQLVM1-$(Build.BuildNumber)
+                          -TemplateFile ${{ variables.armroot }}\VM\deploy.json
+                          -ParametersFile ${{ variables.paramsroot }}\VM1\${{ variables.paramsfileprefix }}.parameters.json
+                          -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\${{ variables.paramsfileprefix }}.parameters.json'
+
+        azurePowerShellVersion: LatestVersion
+        errorActionPreference: continue
+
+
+    - task: AzurePowerShell@4
+      displayName: 'Deploy SQL VM2'
+      inputs:
+        azureSubscription: ${{ variables.azureSubscription }}
+        ScriptType: 'FilePath'
+        ScriptPath: ${{ variables.scriptroot }}\Deploy.ps1
+        ScriptArguments: '-DeploymentName SQLVM1-$(Build.BuildNumber)
+                          -TemplateFile ${{ variables.armroot }}\VM\deploy.json
+                          -ParametersFile ${{ variables.paramsroot }}\VM2\${{ variables.paramsfileprefix }}.parameters.json
+                          -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\${{ variables.paramsfileprefix }}.parameters.json'
+
+        azurePowerShellVersion: LatestVersion
+        errorActionPreference: continue
+
+    
+    - task: AzurePowerShell@4
+      displayName: 'SQLVM - Associate NSGs VM1'
+      inputs:
+        azureSubscription: ${{ variables.azureSubscription }}
+        ScriptType: 'FilePath'
+        ScriptPath: ${{ variables.scriptroot }}\attach-NSG.ps1
+        Scriptarguments: '-ParametersFile ${{ variables.paramsroot }}\VM1\${{ variables.paramsfileprefix}}.attachnsg.json'
+        
+        azurePowerShellVersion: LatestVersion
+        errorActionPreference: continue
+
+    - task: AzurePowerShell@4
+      displayName: 'SQLVM - Associate NSGs VM2'
+      inputs:
+        azureSubscription: ${{ variables.azureSubscription }}
+        ScriptType: 'FilePath'
+        ScriptPath: ${{ variables.scriptroot }}\attach-NSG.ps1
+        Scriptarguments: '-ParametersFile ${{ variables.paramsroot }}\VM2\${{ variables.paramsfileprefix}}.attachnsg.json'
+        
+        azurePowerShellVersion: LatestVersion
+        errorActionPreference: continue        
+
+    - task: AzurePowerShell@4
+      displayName: 'SQLVM - Domain Join'
+      inputs:
+        azureSubscription: ${{ variables.azureSubscription }}
+        ScriptType: 'FilePath'
+        ScriptPath: ${{ variables.scriptroot }}\deploy.ps1
+        ScriptArguments: '-DeploymentName ADjoin-$(Build.BuildNumber)
+                          -TemplateFile ${{ variables.djoinroot }}\deploy.json
+                          -ParametersFile ${{ variables.djoinroot }}\${{ variables.paramsfileprefix}}.parameters.json
+                          -ResourceGroupParametersFile ${{ variables.djoinroot }}\ResourceGroup\${{ variables.paramsfileprefix}}.parameters.json'
+
+        azurePowerShellVersion: LatestVersion
+        errorActionPreference: continue       
+
