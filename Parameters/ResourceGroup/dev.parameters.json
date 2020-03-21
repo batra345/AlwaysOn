@@ -6,7 +6,7 @@
             "value": {
                 "Application": "xxxx",
                 "CostCenter": "xxxx",
-                "Environment" : "TEST"
+                "Environment" : "DEV"
             }            
         },
         "rgName": {
