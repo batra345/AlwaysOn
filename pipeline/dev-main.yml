@@ -5,7 +5,7 @@ resources:
   repositories:
   - repository: Templates
     type: git
-    name: 'Azure sqlha'
+    name: 'AlwaysOn'
 
 variables: 
   armroot: $(Pipeline.Workspace)\drop\ARM
