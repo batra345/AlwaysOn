@@ -24,7 +24,7 @@
           }
       },
       "virtualMachineSize": {
-          "value":"Standard B2ms"
+          "value":"Standard_B2ms"
       },
       "existingVirtualNetworkName": {
           "value":"SQL-HA2-vnet"
