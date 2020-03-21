@@ -29,7 +29,7 @@ $objParametersFile = Get-Content -Path $ParametersFile | ConvertFrom-Json
 
 #Define rule, create NSG and attach rule
 $rules = New-AzNetworkSecurityRuleConfig -Name $RuleName1 -Direction Inbound -Priority 1000 -Access Allow -SourceAddressPrefix '*'  -SourcePortRange '*' -DestinationAddressPrefix '*' -DestinationPortRange 3389 -Protocol Tcp 
-New-AzNetworkSecurityGroup -Name $NSGname -ResourceGroupName $ResourceGroupName -Location $Location1 -SecurityRules $rules
+New-AzNetworkSecurityGroup -Name $NSGname -ResourceGroupName $ResourceGroupName -Location $Location1 -SecurityRules $rules -force
 
 #Attach NSG to NIC
 $nic = Get-AzNetworkInterface -ResourceGroupName $ResourceGroupName -Name $NICname
