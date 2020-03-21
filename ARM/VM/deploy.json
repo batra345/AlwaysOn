@@ -22,6 +22,7 @@
             "type": "String",
             "defaultValue": "Standard_DS12_v2",
                 "allowedValues": [
+                    "Standard_DS12_v2",
                     "Standard_DS13_v2",
                     "Standard_DS3_v2"
                 ],
