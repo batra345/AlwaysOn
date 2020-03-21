@@ -10,6 +10,12 @@
         },
         "NSGname": {
             "value": "DB-nsg"
+        },
+        "RuleName1": {
+            "value": "allow-rdp"
+        },                           
+        "Location1": {
+            "value": "westeurope"
         }
     }
 } 
