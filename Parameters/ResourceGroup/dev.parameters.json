@@ -10,7 +10,7 @@
             }            
         },
         "rgName": {
-            "value": "AlwaysOn"
+            "value": "SQL-HA2"
         },
         "rgLocation": {
             "value": "westeurope"
