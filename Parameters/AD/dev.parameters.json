@@ -9,7 +9,7 @@
             "value": "sqlvm01,sqlvm02"
         },
         "domainJoinUserName": { 
-           "value": "adjoin1"
+           "value": "adjoin1@sqlha.net"
         },        
         "domainJoinUserPassword": { 
             "reference": {
