@@ -163,5 +163,20 @@ stages:
                           -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\${{ variables.paramsfileprefix}}.parameters.json'
 
         azurePowerShellVersion: LatestVersion
-        errorActionPreference: continue       
+        errorActionPreference: continue      
+
+
+    - task: AzurePowerShell@4
+      displayName: 'SQL HA - Load balancer'
+      inputs:
+        azureSubscription: ${{ variables.azureSubscription }}
+        ScriptType: 'FilePath'
+        ScriptPath: ${{ variables.scriptroot }}\deploy.ps1
+        ScriptArguments: '-DeploymentName LBdeploy-$(Build.BuildNumber)
+                          -TemplateFile ${{ variables.armroot }}\LB\deploy.json
+                          -ParametersFile ${{ variables.paramsroot }}\LB\${{ variables.paramsfileprefix}}.parameters.json
+                          -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\${{ variables.paramsfileprefix}}.parameters.json'
+
+        azurePowerShellVersion: LatestVersion
+        errorActionPreference: continue   
 
