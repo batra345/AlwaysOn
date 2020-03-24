@@ -9,14 +9,14 @@
             "value": "sqlvm01,sqlvm02"
         },
         "domainJoinUserName": { 
-           "value": "adjoin1@sqlha.net"
+           "value": "adjoin@sqlha.net"
         },        
         "domainJoinUserPassword": { 
             "reference": {
                 "keyVault": {
                 "id": "/subscriptions/f1e1bfe7-0ee3-4b16-ade2-902563794f64/resourceGroups/SQL-HA2/providers/Microsoft.KeyVault/vaults/alwaysonkv01"
                 },
-            "secretName": "adjoin1"
+            "secretName": "adjoin"
             }
         },
         "domainFQDN": {
