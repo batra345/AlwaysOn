@@ -26,7 +26,7 @@
   },
   "variables": {
     "virtualNetworkName": "SQL-HA2-vnet",
-    "subnetName": "Default",
+    "subnetName": "LBsubnet",
     "loadBalancerName": "lbsqlha",
     "nicName": "lbnic",
     "subnetRef": "[resourceId('Microsoft.Network/virtualNetworks/subnets', variables('virtualNetworkName'), variables('subnetName'))]"
