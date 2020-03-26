@@ -165,7 +165,6 @@ stages:
         azurePowerShellVersion: LatestVersion
         errorActionPreference: continue      
 
-
     - task: AzurePowerShell@4
       displayName: 'SQL HA - Load balancer'
       inputs:
@@ -180,3 +179,30 @@ stages:
         azurePowerShellVersion: LatestVersion
         errorActionPreference: continue   
 
+    - task: AzurePowerShell@4
+      displayName: 'Bastion Host'
+      inputs:
+        azureSubscription: ${{ variables.azureSubscription }}
+        ScriptType: 'FilePath'
+        ScriptPath: ${{ variables.scriptroot }}\deploy.ps1
+        ScriptArguments: '-DeploymentName Bastion-$(Build.BuildNumber)
+                          -TemplateFile ${{ variables.armroot }}\Bastion\deploy.json
+                          -ParametersFile ${{ variables.paramsroot }}\Bastion\${{ variables.paramsfileprefix}}.parameters.json
+                          -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\${{ variables.paramsfileprefix}}.parameters.json'
+
+        azurePowerShellVersion: LatestVersion
+        errorActionPreference: continue   
+
+    - task: AzurePowerShell@4
+      displayName: 'Always On Availibility Group'
+      inputs:
+        azureSubscription: ${{ variables.azureSubscription }}
+        ScriptType: 'FilePath'
+        ScriptPath: ${{ variables.scriptroot }}\deploy.ps1
+        ScriptArguments: '-DeploymentName AOAG-$(Build.BuildNumber)
+                          -TemplateFile ${{ variables.armroot }}\AOAG\deploy.json
+                          -ParametersFile ${{ variables.paramsroot }}\AOAG\${{ variables.paramsfileprefix}}.parameters.json
+                          -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\${{ variables.paramsfileprefix}}.parameters.json'
+
+        azurePowerShellVersion: LatestVersion
+        errorActionPreference: continue   

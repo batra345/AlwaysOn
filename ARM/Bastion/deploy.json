@@ -2,46 +2,45 @@
     "$schema": "http://schema.management.azure.com/schemas/2015-01-01/deploymentTemplate.json#",
     "contentVersion": "1.0.0.0",
     "parameters": {
-        "name": {
-            "type": "string"
-        },
         "location": {
             "type": "string"
         },
-        "sku": {
+        "resourceGroup": {
+            "type": "string"
+        },
+        "bastionHostName": {
             "type": "string"
         },
         "subnetId": {
             "type": "string"
         },
-        "privateIPAllocationMethod": {
+        "publicIpAddressId": {
             "type": "string"
         }
     },
     "resources": [
         {
-            "apiVersion": "2019-06-01",
-            "name": "[parameters('name')]",
-            "type": "Microsoft.Network/loadBalancers",
+            "apiVersion": "2018-10-01",
+            "type": "Microsoft.Network/bastionHosts",
+            "name": "[parameters('bastionHostName')]",
             "location": "[parameters('location')]",
-            "sku": {
-                "name": "[parameters('sku')]"
-            },
             "dependsOn": [],
-            "tags": {},
             "properties": {
-                "frontendIPConfigurations": [
+                "ipConfigurations": [
                     {
-                        "name": "LoadBalancerFrontEnd",
+                        "name": "IpConf",
                         "properties": {
-                            "privateIPAllocationMethod": "[parameters('privateIPAllocationMethod')]",
                             "subnet": {
                                 "id": "[parameters('subnetId')]"
+                            },
+                            "publicIPAddress": {
+                                "id": "[parameters('publicIpAddressId')]"
                             }
                         }
                     }
                 ]
-            }
+            },
+            "tags": {}
         }
     ]
 }
