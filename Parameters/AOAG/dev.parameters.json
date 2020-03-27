@@ -44,6 +44,9 @@
         },
         "cloudWitnessName": {
             "value": "sqlhasa"
+        },
+        "_artifactsLocation": {
+            "value": "https://dev.azure.com/batracloud345/_git/AlwaysOn?path=%2FARM%2FAOAG&version=GBtest2"
         }                                        
     }
 } 
