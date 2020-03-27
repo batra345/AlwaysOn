@@ -193,7 +193,7 @@ stages:
         azurePowerShellVersion: LatestVersion
         errorActionPreference: continue   
 
-        
+
     - task: AzurePowerShell@4
       displayName: 'Always On Availibility Group'
       inputs:
@@ -206,4 +206,18 @@ stages:
                           -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\${{ variables.paramsfileprefix}}.parameters.json'
 
         azurePowerShellVersion: LatestVersion
-        errorActionPreference: continue   
+        errorActionPreference: continue
+
+    - task: AzurePowerShell@4
+      displayName: 'Always On Listener'
+      inputs:
+        azureSubscription: ${{ variables.azureSubscription }}
+        ScriptType: 'FilePath'
+        ScriptPath: ${{ variables.scriptroot }}\deploy.ps1
+        ScriptArguments: '-DeploymentName AOLIST-$(Build.BuildNumber)
+                          -TemplateFile ${{ variables.armroot }}\AOList\deploy.json
+                          -ParametersFile ${{ variables.paramsroot }}\AOList\${{ variables.paramsfileprefix}}.parameters.json
+                          -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\${{ variables.paramsfileprefix}}.parameters.json'
+
+        azurePowerShellVersion: LatestVersion
+        errorActionPreference: continue
