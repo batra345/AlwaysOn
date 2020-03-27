@@ -46,7 +46,7 @@
             "value": "sqlhasa"
         },
         "_artifactsLocation": {
-            "value": "https://batracloud345@dev.azure.com/batracloud345/AlwaysOn/_git/AlwaysOn"
+            "value": "https://raw.githubusercontent.com/Azure/azure-quickstart-templates/master/101-sql-vm-ag-setup"
         }                                        
     }
 } 
