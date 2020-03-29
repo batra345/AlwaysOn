@@ -209,7 +209,7 @@ stages:
 #        errorActionPreference: continue
 
     - task: AzurePowerShell@4
-     displayName: 'Always On Listener'
+      displayName: 'Always On Listener'
       inputs:
         azureSubscription: ${{ variables.azureSubscription }}
         ScriptType: 'FilePath'
