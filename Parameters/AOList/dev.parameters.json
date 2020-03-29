@@ -9,7 +9,7 @@
             "value": "sqlvm01,sqlvm02"
         },
         "existingSqlAvailabilityGroup": {
-            "value": ""
+            "value": "sqlag1"
         },
         "Listener": {
             "value": "consqlha"
