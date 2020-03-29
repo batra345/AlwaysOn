@@ -194,30 +194,30 @@ stages:
 #        azurePowerShellVersion: LatestVersion
  #       errorActionPreference: continue     
 
+#    - task: AzurePowerShell@4
+ #     displayName: 'Always On Availibility Group'
+  #    inputs:
+   #     azureSubscription: ${{ variables.azureSubscription }}
+    #    ScriptType: 'FilePath'
+     #   ScriptPath: ${{ variables.scriptroot }}\deploy.ps1
+      #  ScriptArguments: '-DeploymentName AOAG-$(Build.BuildNumber)
+       #                   -TemplateFile ${{ variables.armroot }}\AOAG\deploy.json
+        #                  -ParametersFile ${{ variables.paramsroot }}\AOAG\${{ variables.paramsfileprefix}}.parameters.json
+         #                 -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\${{ variables.paramsfileprefix}}.parameters.json'
+
+#        azurePowerShellVersion: LatestVersion
+#        errorActionPreference: continue
+
     - task: AzurePowerShell@4
-      displayName: 'Always On Availibility Group'
+     displayName: 'Always On Listener'
       inputs:
         azureSubscription: ${{ variables.azureSubscription }}
         ScriptType: 'FilePath'
         ScriptPath: ${{ variables.scriptroot }}\deploy.ps1
-        ScriptArguments: '-DeploymentName AOAG-$(Build.BuildNumber)
-                          -TemplateFile ${{ variables.armroot }}\AOAG\deploy.json
-                          -ParametersFile ${{ variables.paramsroot }}\AOAG\${{ variables.paramsfileprefix}}.parameters.json
+        ScriptArguments: '-DeploymentName AOLIST-$(Build.BuildNumber)
+                          -TemplateFile ${{ variables.armroot }}\AOList\deploy.json
+                          -ParametersFile ${{ variables.paramsroot }}\AOList\${{ variables.paramsfileprefix}}.parameters.json
                           -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\${{ variables.paramsfileprefix}}.parameters.json'
 
         azurePowerShellVersion: LatestVersion
         errorActionPreference: continue
-
-#    - task: AzurePowerShell@4
-#     displayName: 'Always On Listener'
- #     inputs:
-  #      azureSubscription: ${{ variables.azureSubscription }}
-   #     ScriptType: 'FilePath'
-    #    ScriptPath: ${{ variables.scriptroot }}\deploy.ps1
-     #   ScriptArguments: '-DeploymentName AOLIST-$(Build.BuildNumber)
-      #                    -TemplateFile ${{ variables.armroot }}\AOList\deploy.json
-       #                   -ParametersFile ${{ variables.paramsroot }}\AOList\${{ variables.paramsfileprefix}}.parameters.json
-        #                  -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\${{ variables.paramsfileprefix}}.parameters.json'
-
-#        azurePowerShellVersion: LatestVersion
-#        errorActionPreference: continue
