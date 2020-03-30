@@ -195,7 +195,7 @@
         "dependsOn": ["[concat('Microsoft.Network/networkInterfaces/', variables('Prefix'), '-nic')]"],
         "properties": {
           "availabilitySet": { 
-              "id": "[resourceId('Microsoft.Compute/availabilitySets', 'availabilitySet1')]"
+              "id": "[resourceId('Microsoft.Compute/availabilitySets', 'aset1')]"
               },
           "hardwareProfile": {
             "vmSize": "[parameters('virtualMachineSize')]"
