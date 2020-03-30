@@ -166,6 +166,16 @@
       "tempDbPath":  "D:\\SQLTemp"
     },
     "resources": [
+        { 
+            "type": "Microsoft.Compute/availabilitySets", 
+            "name": "availabilitySet1", 
+            "apiVersion": "2015-06-15", 
+            "location": "[parameters('location')]", 
+            "properties": { 
+            "platformFaultDomainCount": 2, 
+            "platformUpdateDomainCount": "3"
+          }
+        },
         {
             "apiVersion": "2018-11-01",
             "type": "Microsoft.Network/networkInterfaces",
@@ -195,7 +205,10 @@
         "dependsOn": ["[concat('Microsoft.Network/networkInterfaces/', variables('Prefix'), '-nic')]"],
         "properties": {
           "hardwareProfile": {
-            "vmSize": "[parameters('virtualMachineSize')]"
+            "vmSize": "[parameters('virtualMachineSize')]",
+            "availabilitySet": { 
+              "id": "availabilitySet1"
+              }
           },
           "storageProfile": {
             "osDisk": {
