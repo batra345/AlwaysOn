@@ -99,7 +99,7 @@ stages:
 #        azurePowerShellVersion: LatestVersion
  #       errorActionPreference: continue
 
-     - task: AzurePowerShell@4
+    - task: AzurePowerShell@4
       displayName: 'Deploy Managed Availbility Set'
       inputs:
         azureSubscription: ${{ variables.azureSubscription }}
