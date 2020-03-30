@@ -204,11 +204,11 @@
         "location": "[parameters('location')]",
         "dependsOn": ["[concat('Microsoft.Network/networkInterfaces/', variables('Prefix'), '-nic')]"],
         "properties": {
-          "hardwareProfile": {
-            "vmSize": "[parameters('virtualMachineSize')]",
-            "availabilitySet": { 
+          "availabilitySet": { 
               "id": "availabilitySet1"
-              }
+              },
+          "hardwareProfile": {
+            "vmSize": "[parameters('virtualMachineSize')]"
           },
           "storageProfile": {
             "osDisk": {
