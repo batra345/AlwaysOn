@@ -99,6 +99,20 @@ stages:
 #        azurePowerShellVersion: LatestVersion
  #       errorActionPreference: continue
 
+     - task: AzurePowerShell@4
+      displayName: 'Deploy Managed Availbility Set'
+      inputs:
+        azureSubscription: ${{ variables.azureSubscription }}
+        ScriptType: 'FilePath'
+        ScriptPath: ${{ variables.scriptroot }}\Deploy.ps1
+        ScriptArguments: '-DeploymentName ASET-$(Build.BuildNumber)
+                          -TemplateFile ${{ variables.armroot }}\Aset\deploy.json
+                          -ParametersFile ${{ variables.paramsroot }}\Aset\${{ variables.paramsfileprefix }}.parameters.json
+                          -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\${{ variables.paramsfileprefix }}.parameters.json'
+
+        azurePowerShellVersion: LatestVersion
+        errorActionPreference: continue
+
     - task: AzurePowerShell@4
       displayName: 'Deploy SQL VM1'
       inputs:
