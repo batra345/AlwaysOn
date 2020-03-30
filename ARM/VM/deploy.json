@@ -166,19 +166,6 @@
       "tempDbPath":  "D:\\SQLTemp"
     },
     "resources": [
-        { 
-            "type": "Microsoft.Compute/availabilitySets", 
-            "name": "availabilitySet1", 
-            "apiVersion": "2015-06-15", 
-            "location": "[parameters('location')]", 
-            "properties": { 
-            "platformFaultDomainCount": 2, 
-            "platformUpdateDomainCount": "3"
-          },
-          "sku": {
-            "name": "Aligned"
-          }
-        },
         {
             "apiVersion": "2018-11-01",
             "type": "Microsoft.Network/networkInterfaces",
