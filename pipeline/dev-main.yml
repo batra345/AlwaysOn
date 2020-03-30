@@ -206,7 +206,7 @@ stages:
                           -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\${{ variables.paramsfileprefix}}.parameters.json'
 
         azurePowerShellVersion: LatestVersion
-       errorActionPreference: continue     
+        errorActionPreference: continue     
 
 #    - task: AzurePowerShell@4
  #     displayName: 'Always On Availibility Group'
