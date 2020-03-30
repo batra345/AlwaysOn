@@ -175,7 +175,7 @@
             "platformFaultDomainCount": 2, 
             "platformUpdateDomainCount": "3"
           },
-            "sku": {
+          "sku": {
             "name": "Aligned"
           }
         },
