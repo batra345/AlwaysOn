@@ -129,19 +129,19 @@ stages:
 #        azurePowerShellVersion: LatestVersion
  #       errorActionPreference: continue
 
-#    - task: AzurePowerShell@4
- #     displayName: 'Deploy SQL VM1'
-  #    inputs:
-   #     azureSubscription: ${{ variables.azureSubscription }}
-    #    ScriptType: 'FilePath'
-     #   ScriptPath: ${{ variables.scriptroot }}\Deploy.ps1
-      #  ScriptArguments: '-DeploymentName SQLVM1-$(Build.BuildNumber)
-       #                   -TemplateFile ${{ variables.armroot }}\VM\deploy.json
-        #                  -ParametersFile ${{ variables.paramsroot }}\VM1\${{ variables.paramsfileprefix }}.parameters.json
-         #                 -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\${{ variables.paramsfileprefix }}.parameters.json'
+    - task: AzurePowerShell@4
+      displayName: 'Deploy SQL VM1'
+      inputs:
+        azureSubscription: ${{ variables.azureSubscription }}
+        ScriptType: 'FilePath'
+        ScriptPath: ${{ variables.scriptroot }}\Deploy.ps1
+        ScriptArguments: '-DeploymentName SQLVM1-$(Build.BuildNumber)
+                          -TemplateFile ${{ variables.armroot }}\VM\deploy.json
+                          -ParametersFile ${{ variables.paramsroot }}\VMdr\${{ variables.paramsfileprefixdr }}.parameters.json
+                          -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\${{ variables.paramsfileprefixdr }}.parameters.json'
 
-#        azurePowerShellVersion: LatestVersion
- #       errorActionPreference: continue
+        azurePowerShellVersion: LatestVersion
+        errorActionPreference: continue
 
 
 #    - task: AzurePowerShell@4
@@ -159,16 +159,16 @@ stages:
   #      errorActionPreference: continue
 
     
-#    - task: AzurePowerShell@4
- #     displayName: 'SQLVM - Associate NSGs VM1'
-  #    inputs:
-   #     azureSubscription: ${{ variables.azureSubscription }}
-    #    ScriptType: 'FilePath'
-     #   ScriptPath: ${{ variables.scriptroot }}\create-attach-NSG.ps1
-      #  Scriptarguments: '-ParametersFile ${{ variables.paramsroot }}\VM1\${{ variables.paramsfileprefix}}.attachnsg.json'
-#        
- #       azurePowerShellVersion: LatestVersion
-  #      errorActionPreference: continue
+    - task: AzurePowerShell@4
+      displayName: 'SQLVM - Associate NSGs VM1'
+      inputs:
+        azureSubscription: ${{ variables.azureSubscription }}
+        ScriptType: 'FilePath'
+        ScriptPath: ${{ variables.scriptroot }}\create-attach-NSG.ps1
+        Scriptarguments: '-ParametersFile ${{ variables.paramsroot }}\VMdr\${{ variables.paramsfileprefixdr}}.attachnsg.json'
+        
+        azurePowerShellVersion: LatestVersion
+        errorActionPreference: continue
 
 #    - task: AzurePowerShell@4
  #     displayName: 'SQLVM - Associate NSGs VM2'
