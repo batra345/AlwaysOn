@@ -203,7 +203,7 @@ stages:
         ScriptType: 'FilePath'
         ScriptPath: ${{ variables.scriptroot }}\deploy.ps1
         ScriptArguments: '-DeploymentName ADjoin-$(Build.BuildNumber)
-                          -TemplateFile ${{ variables.armroot }}\AD\deploy.json
+                          -TemplateFile ${{ variables.armroot }}\AD\dr.deploy.json
                           -ParametersFile ${{ variables.paramsroot }}\AD\${{ variables.paramsfileprefixdr}}.parameters.json
                           -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\${{ variables.paramsfileprefixdr}}.parameters.json'
 
