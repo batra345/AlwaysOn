@@ -1,0 +1,238 @@
+trigger: none
+
+# All templates are located in this repository.
+resources:
+  repositories:
+  - repository: Templates
+    type: git
+    name: 'AlwaysOn'
+
+variables: 
+  armroot: $(Pipeline.Workspace)\drop\ARM
+  paramsroot: $(Pipeline.Workspace)\drop\Parameters
+  scriptroot: $(Pipeline.Workspace)\drop\Scripts
+  paramsfileprefix: 'dev'
+  paramsfileprefixdr: 'dr'
+  environment: 'DEV-SQL'
+  azureSubscription: 'Azure_test'
+
+stages:
+# Download the universal packages/ARM templates that is used in the pipeline.
+# Additional templates must be published and included in the template file or directly included in the parameters folder.
+- stage: Build
+  displayName: 'Download templates'
+  jobs:
+  - job: Download_template
+    displayName: "Download template deploy"
+    pool:
+      name: Hosted Windows 2019 with VS2019
+    continueOnError: 'true'
+
+    steps:
+
+    - task: CopyFiles@2
+      displayName: 'Copy Parameterfiles to: $(build.artifactstagingdirectory)\'
+      inputs:
+        SourceFolder: ''
+        TargetFolder: '$(build.artifactstagingdirectory)'
+        CleanTargetFolder: true
+        OverWrite: true
+
+# The application and the modules are packaged together and an artifact to be used in the deployment is created. 
+
+    - task: PublishBuildArtifacts@1
+      displayName: 'Publish Build Artifact'
+      inputs:
+        artifactName: 'drop'
+        pathtoPublish: '$(build.artifactstagingdirectory)'
+
+                  
+                        
+# Run scripts to deploy SQL VMs with HA.
+
+- stage: DeploySQL
+  displayName: 'Deploy SQL VM'
+  dependsOn:
+  - Build
+  condition: 
+  variables:
+    environment: 'dev'
+
+
+  jobs:
+
+  - job: DeploySQLVMALL
+    displayName: 'Deploy SQLVM All'
+    condition: 
+    continueOnError: true
+    pool:
+      name: Hosted Windows 2019 with VS2019
+    steps:
+    - download: current
+      artifact: drop     
+
+#    - task: AzurePowerShell@4
+ #     displayName: 'Deploy STORAGE ACCOUNT'
+  #    inputs:
+   #     azureSubscription: ${{ variables.azureSubscription }}
+    #    ScriptType: 'FilePath'
+     #   ScriptPath: ${{ variables.scriptroot }}\Deploy.ps1
+      #  ScriptArguments: '-DeploymentName SA-$(Build.BuildNumber)
+       #                   -TemplateFile ${{ variables.armroot }}\storage\deploy.json
+        #                  -ParametersFile ${{ variables.paramsroot }}\storage\${{ variables.paramsfileprefix }}.parameters.json
+         #                 -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\${{ variables.paramsfileprefix }}.parameters.json'
+#
+ #       azurePowerShellVersion: LatestVersion
+  #      errorActionPreference: continue
+
+
+    - task: AzurePowerShell@4
+      displayName: 'Deploy KEY VAULT'
+      inputs:
+        azureSubscription: ${{ variables.azureSubscription }}
+        ScriptType: 'FilePath'
+        ScriptPath: ${{ variables.scriptroot }}\Deploy.ps1
+        ScriptArguments: '-DeploymentName KV-$(Build.BuildNumber)
+                          -TemplateFile ${{ variables.armroot }}\KV\deploy.json
+                          -ParametersFile ${{ variables.paramsroot }}\KV\${{ variables.paramsfileprefixdr }}.parameters.json
+                          -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\${{ variables.paramsfileprefixdr }}.parameters.json'
+
+        azurePowerShellVersion: LatestVersion
+        errorActionPreference: continue
+
+#    - task: AzurePowerShell@4
+ #     displayName: 'Deploy Managed Availbility Set'
+  #    inputs:
+   #     azureSubscription: ${{ variables.azureSubscription }}
+    #    ScriptType: 'FilePath'
+     #   ScriptPath: ${{ variables.scriptroot }}\Deploy.ps1
+      #  ScriptArguments: '-DeploymentName ASET-$(Build.BuildNumber)
+       #                   -TemplateFile ${{ variables.armroot }}\Aset\deploy.json
+        #                  -ParametersFile ${{ variables.paramsroot }}\Aset\${{ variables.paramsfileprefix }}.parameters.json
+         #                 -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\${{ variables.paramsfileprefix }}.parameters.json'
+
+#        azurePowerShellVersion: LatestVersion
+ #       errorActionPreference: continue
+
+#    - task: AzurePowerShell@4
+ #     displayName: 'Deploy SQL VM1'
+  #    inputs:
+   #     azureSubscription: ${{ variables.azureSubscription }}
+    #    ScriptType: 'FilePath'
+     #   ScriptPath: ${{ variables.scriptroot }}\Deploy.ps1
+      #  ScriptArguments: '-DeploymentName SQLVM1-$(Build.BuildNumber)
+       #                   -TemplateFile ${{ variables.armroot }}\VM\deploy.json
+        #                  -ParametersFile ${{ variables.paramsroot }}\VM1\${{ variables.paramsfileprefix }}.parameters.json
+         #                 -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\${{ variables.paramsfileprefix }}.parameters.json'
+
+#        azurePowerShellVersion: LatestVersion
+ #       errorActionPreference: continue
+
+
+#    - task: AzurePowerShell@4
+ #     displayName: 'Deploy SQL VM2'
+  #    inputs:
+   #     azureSubscription: ${{ variables.azureSubscription }}
+    #    ScriptType: 'FilePath'
+     #   ScriptPath: ${{ variables.scriptroot }}\Deploy.ps1
+      #  ScriptArguments: '-DeploymentName SQLVM1-$(Build.BuildNumber)
+       #                   -TemplateFile ${{ variables.armroot }}\VM\deploy.json
+        #                  -ParametersFile ${{ variables.paramsroot }}\VM2\${{ variables.paramsfileprefix }}.parameters.json
+         #                 -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\${{ variables.paramsfileprefix }}.parameters.json'
+#
+ #       azurePowerShellVersion: LatestVersion
+  #      errorActionPreference: continue
+
+    
+#    - task: AzurePowerShell@4
+ #     displayName: 'SQLVM - Associate NSGs VM1'
+  #    inputs:
+   #     azureSubscription: ${{ variables.azureSubscription }}
+    #    ScriptType: 'FilePath'
+     #   ScriptPath: ${{ variables.scriptroot }}\create-attach-NSG.ps1
+      #  Scriptarguments: '-ParametersFile ${{ variables.paramsroot }}\VM1\${{ variables.paramsfileprefix}}.attachnsg.json'
+#        
+ #       azurePowerShellVersion: LatestVersion
+  #      errorActionPreference: continue
+
+#    - task: AzurePowerShell@4
+ #     displayName: 'SQLVM - Associate NSGs VM2'
+  #    inputs:
+   #     azureSubscription: ${{ variables.azureSubscription }}
+    #    ScriptType: 'FilePath'
+     #   ScriptPath: ${{ variables.scriptroot }}\create-attach-NSG.ps1
+      #  Scriptarguments: '-ParametersFile ${{ variables.paramsroot }}\VM2\${{ variables.paramsfileprefix}}.attachnsg.json'
+        
+#        azurePowerShellVersion: LatestVersion
+ #       errorActionPreference: continue        
+
+  
+#    - task: AzurePowerShell@4
+ #     displayName: 'SQL HA - Load balancer'
+  #    inputs:
+   #     azureSubscription: ${{ variables.azureSubscription }}
+    #    ScriptType: 'FilePath'
+     #   ScriptPath: ${{ variables.scriptroot }}\deploy.ps1
+      #  ScriptArguments: '-DeploymentName LBdeploy-$(Build.BuildNumber)
+       #                   -TemplateFile ${{ variables.armroot }}\LB\deploy.json
+        #                  -ParametersFile ${{ variables.paramsroot }}\LB\${{ variables.paramsfileprefix}}.parameters.json
+         #                 -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\${{ variables.paramsfileprefix}}.parameters.json'
+
+#        azurePowerShellVersion: LatestVersion
+ #       errorActionPreference: continue   
+
+#    - task: AzurePowerShell@4
+ #     displayName: 'Bastion Host'
+  #    inputs:
+   #     azureSubscription: ${{ variables.azureSubscription }}
+    #    ScriptType: 'FilePath'
+     #   ScriptPath: ${{ variables.scriptroot }}\deploy.ps1
+      #  ScriptArguments: '-DeploymentName Bastion-$(Build.BuildNumber)
+       #                   -TemplateFile ${{ variables.armroot }}\Bastion\deploy.json
+        #                  -ParametersFile ${{ variables.paramsroot }}\Bastion\${{ variables.paramsfileprefix}}.parameters.json
+         #                 -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\${{ variables.paramsfileprefix}}.parameters.json'
+
+#        azurePowerShellVersion: LatestVersion
+ #       errorActionPreference: continue   
+
+#    - task: AzurePowerShell@4
+ #     displayName: 'SQLVM - Domain Join'
+  #    inputs:
+   #     azureSubscription: ${{ variables.azureSubscription }}
+    #    ScriptType: 'FilePath'
+     #   ScriptPath: ${{ variables.scriptroot }}\deploy.ps1
+      #  ScriptArguments: '-DeploymentName ADjoin-$(Build.BuildNumber)
+       #                   -TemplateFile ${{ variables.armroot }}\AD\deploy.json
+        #                  -ParametersFile ${{ variables.paramsroot }}\AD\${{ variables.paramsfileprefix}}.parameters.json
+         #                 -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\${{ variables.paramsfileprefix}}.parameters.json'
+
+#        azurePowerShellVersion: LatestVersion
+ #       errorActionPreference: continue     
+
+#    - task: AzurePowerShell@4
+ #     displayName: 'Always On Availibility Group'
+  #    inputs:
+   #     azureSubscription: ${{ variables.azureSubscription }}
+    #    ScriptType: 'FilePath'
+     #   ScriptPath: ${{ variables.scriptroot }}\deploy.ps1
+      #  ScriptArguments: '-DeploymentName AOAG-$(Build.BuildNumber)
+       #                   -TemplateFile ${{ variables.armroot }}\AOAG\deploy.json
+        #                  -ParametersFile ${{ variables.paramsroot }}\AOAG\${{ variables.paramsfileprefix}}.parameters.json
+         #                 -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\${{ variables.paramsfileprefix}}.parameters.json'
+#
+ #       azurePowerShellVersion: LatestVersion
+  #      errorActionPreference: continue
+
+#    - task: AzurePowerShell@4
+ #     displayName: 'Always On Listener'
+  #    inputs:
+   #     azureSubscription: ${{ variables.azureSubscription }}
+    #    ScriptType: 'FilePath'
+     #   ScriptPath: ${{ variables.scriptroot }}\deploy.ps1
+      #  ScriptArguments: '-DeploymentName AOLIST-$(Build.BuildNumber)
+       #                   -TemplateFile ${{ variables.armroot }}\AOList\deploy.json
+        #                  -ParametersFile ${{ variables.paramsroot }}\AOList\${{ variables.paramsfileprefix}}.parameters.json
+         #                 -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\${{ variables.paramsfileprefix}}.parameters.json'
+#
+ #       azurePowerShellVersion: LatestVersion
+  #      errorActionPreference: continue
