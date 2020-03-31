@@ -14,7 +14,8 @@ variables:
   paramsfileprefix: 'dev'
   paramsfileprefixdr: 'dr'
   environment: 'DEV-SQL'
-  azureSubscription: 'Azure_test'
+#  azureSubscription: 'Azure_test'
+  azureSubscription: 'Azure-DR'
 
 stages:
 # Download the universal packages/ARM templates that is used in the pipeline.
