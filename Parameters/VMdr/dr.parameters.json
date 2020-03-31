@@ -1,0 +1,48 @@
+  {
+    "$schema": "https://schema.management.azure.com/schemas/2015-01-01/deploymentParameters.json#",
+    "contentVersion": "1.0.0.0",
+    "parameters": {
+          "tagValues" : {
+              "value": {
+                  "Application": "SQLHAVM",
+                  "CostCODE": "CC0000",
+                  "Environment" : "DR"
+              }            
+          }, 
+      "virtualMachineName": {
+        "value": "sqlvmdr"
+      },
+      "adminUsername": {
+        "value": "sqladmin"
+      },
+      "adminPassword": {
+          "reference": {
+              "keyVault": {
+                "id": "/subscriptions/f1e1bfe7-0ee3-4b16-ade2-902563794f64/resourceGroups/SQL-DR/providers/Microsoft.KeyVault/vaults/alwaysonkv02"
+              },
+              "secretName": "sqladmin"
+          }
+      },
+      "virtualMachineSize": {
+          "value":"Standard_B2ms"
+      },
+      "existingVirtualNetworkName": {
+          "value":"sqldr-vnet"
+      },
+      "existingSubnetName": {
+          "value": "sqldr-sub"
+      },
+      "imageOffer": {
+          "value":"SQL2017-WS2016"
+      },
+      "sqlSku": {
+          "value":"Enterprise"
+      },
+      "storageWorkloadType": {
+          "value":"General"
+      },
+      "virtualNetworkResourceGroupName": {
+          "value":"SQL-DR"
+      }                                   
+    }
+  }
