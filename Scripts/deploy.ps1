@@ -6,7 +6,8 @@
   This script can validate or deploy any ARM template to Azure. 
 
 .NOTES
-  Version:        1.0
+  Author :     Mohit Batra
+  Version:     1.0
 #>
 
 [CmdletBinding()]
