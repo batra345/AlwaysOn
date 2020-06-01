@@ -3,7 +3,7 @@
     "contentVersion": "1.0.0.0",
     "parameters": {
       "keyVaultName": {
-        "value": "alwaysonkv01"
+        "value": "alwaysonkv011"
       },
       "enabledForDeployment": {
         "value": true
