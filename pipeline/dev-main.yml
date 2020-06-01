@@ -133,7 +133,7 @@ stages:
 
 
     - task: AzurePowerShell@4
-      displayName: 'Deploy Managed Availbility Set'
+      displayName: 'Deploy Managed Availability Set'
       inputs:
         azureSubscription: ${{ variables.azureSubscription }}
         ScriptType: 'FilePath'
