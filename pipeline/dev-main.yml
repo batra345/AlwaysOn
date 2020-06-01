@@ -14,7 +14,7 @@ variables:
   paramsfileprefix: 'dev'
   paramsfileprefixdr: 'dr'
   environment: 'DEV-SQL'
-  azureSubscription: 'Azure_test'
+  azureSubscription: 'Az_Test'
 #  azureSubscription: 'Azure-DR'
 
 stages:
