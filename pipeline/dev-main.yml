@@ -86,6 +86,21 @@ stages:
         azurePowerShellVersion: LatestVersion
         errorActionPreference: continue
 
+    - task: AzurePowerShell@4
+      displayName: 'Deploy ADDS'
+      inputs:
+        azureSubscription: ${{ variables.azureSubscription }}
+        ScriptType: 'FilePath'
+        ScriptPath: ${{ variables.scriptroot }}\Deploy.ps1
+        ScriptArguments: '-DeploymentName ADDS-$(Build.BuildNumber)
+                          -TemplateFile ${{ variables.armroot }}\ADDS\deploy.json
+                          -ParametersFile ${{ variables.paramsroot }}\ADDS\${{ variables.paramsfileprefix }}.parameters.json
+                          -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\${{ variables.paramsfileprefix }}.parameters.json'
+
+        azurePowerShellVersion: LatestVersion
+        errorActionPreference: continue
+
+
 #    - task: AzurePowerShell@4
  #     displayName: 'Deploy STORAGE ACCOUNT'
   #    inputs:
