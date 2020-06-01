@@ -124,8 +124,8 @@ stages:
         ScriptPath: ${{ variables.scriptroot }}\Deploy.ps1
         ScriptArguments: '-DeploymentName KV-$(Build.BuildNumber)
                           -TemplateFile ${{ variables.armroot }}\KV\deploy.json
-                          -ParametersFile ${{ variables.paramsroot }}\KV\${{ variables.paramsfileprefixdr }}.parameters.json
-                          -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\${{ variables.paramsfileprefixdr }}.parameters.json'
+                          -ParametersFile ${{ variables.paramsroot }}\KV\${{ variables.paramsfileprefix }}.parameters.json
+                          -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\${{ variables.paramsfileprefix }}.parameters.json'
 
         azurePowerShellVersion: LatestVersion
         errorActionPreference: continue
@@ -154,8 +154,8 @@ stages:
         ScriptPath: ${{ variables.scriptroot }}\deploy.ps1
         ScriptArguments: '-DeploymentName LBdeploy-$(Build.BuildNumber)
                           -TemplateFile ${{ variables.armroot }}\LB\deploy.json
-                          -ParametersFile ${{ variables.paramsroot }}\LB\${{ variables.paramsfileprefixdr}}.parameters.json
-                          -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\${{ variables.paramsfileprefixdr}}.parameters.json'
+                          -ParametersFile ${{ variables.paramsroot }}\LB\${{ variables.paramsfileprefix}}.parameters.json
+                          -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\${{ variables.paramsfileprefix}}.parameters.json'
 
         azurePowerShellVersion: LatestVersion
         errorActionPreference: continue 
