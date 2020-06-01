@@ -14,8 +14,8 @@ variables:
   paramsfileprefix: 'dev'
   paramsfileprefixdr: 'dr'
   environment: 'DEV-SQL'
-#  azureSubscription: 'Azure_test'
-  azureSubscription: 'Azure-DR'
+  azureSubscription: 'Azure_test'
+#  azureSubscription: 'Azure-DR'
 
 stages:
 # Download the universal packages/ARM templates that is used in the pipeline.
@@ -71,6 +71,20 @@ stages:
     steps:
     - download: current
       artifact: drop     
+
+    - task: AzurePowerShell@4
+      displayName: 'Deploy NETWORK'
+      inputs:
+        azureSubscription: ${{ variables.azureSubscription }}
+        ScriptType: 'FilePath'
+        ScriptPath: ${{ variables.scriptroot }}\Deploy.ps1
+        ScriptArguments: '-DeploymentName vnet-$(Build.BuildNumber)
+                          -TemplateFile ${{ variables.armroot }}\Network\deploy.json
+                          -ParametersFile ${{ variables.paramsroot }}\Network\${{ variables.paramsfileprefix }}.parameters.json
+                          -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\${{ variables.paramsfileprefix }}.parameters.json'
+
+        azurePowerShellVersion: LatestVersion
+        errorActionPreference: continue
 
 #    - task: AzurePowerShell@4
  #     displayName: 'Deploy STORAGE ACCOUNT'
@@ -224,16 +238,16 @@ stages:
  #       azurePowerShellVersion: LatestVersion
   #      errorActionPreference: continue
 
-    - task: AzurePowerShell@4
-      displayName: 'Always On Listener'
-      inputs:
-        azureSubscription: ${{ variables.azureSubscription }}
-        ScriptType: 'FilePath'
-        ScriptPath: ${{ variables.scriptroot }}\deploy.ps1
-        ScriptArguments: '-DeploymentName AOLIST-$(Build.BuildNumber)
-                          -TemplateFile ${{ variables.armroot }}\AOList\deploy.json
-                          -ParametersFile ${{ variables.paramsroot }}\AOList\${{ variables.paramsfileprefixdr}}.parameters.json
-                          -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\${{ variables.paramsfileprefixdr}}.parameters.json'
-
-        azurePowerShellVersion: LatestVersion
-        errorActionPreference: continue
+#    - task: AzurePowerShell@4
+ #     displayName: 'Always On Listener'
+  #    inputs:
+   #     azureSubscription: ${{ variables.azureSubscription }}
+    #    ScriptType: 'FilePath'
+     #   ScriptPath: ${{ variables.scriptroot }}\deploy.ps1
+      #  ScriptArguments: '-DeploymentName AOLIST-$(Build.BuildNumber)
+       #                   -TemplateFile ${{ variables.armroot }}\AOList\deploy.json
+        #                  -ParametersFile ${{ variables.paramsroot }}\AOList\${{ variables.paramsfileprefixdr}}.parameters.json
+         #                 -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\${{ variables.paramsfileprefixdr}}.parameters.json'
+#
+ #       azurePowerShellVersion: LatestVersion
+  #      errorActionPreference: continue
