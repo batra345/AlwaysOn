@@ -30,7 +30,7 @@
           "value":"SQL-HA2-vnet"
       },
       "existingSubnetName": {
-          "value": "default"
+          "value": "SQL-HA2-sub"
       },
       "imageOffer": {
           "value":"SQL2017-WS2016"
