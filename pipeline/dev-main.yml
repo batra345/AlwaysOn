@@ -51,8 +51,8 @@ stages:
                         
 # Run scripts to deploy SQL VMs with HA.
 
-- stage: DeploySQL
-  displayName: 'Deploy SQL VM'
+- stage: BasicComponents
+  displayName: 'Deploy Basic Components'
   dependsOn:
   - Build
   condition: 
@@ -62,8 +62,8 @@ stages:
 
   jobs:
 
-  - job: DeploySQLVMALL
-    displayName: 'Deploy SQLVM All'
+  - job: DeployBasicComponents
+    displayName: 'Deploy Basic Components'
     condition: 
     continueOnError: true
     pool:
@@ -85,21 +85,6 @@ stages:
 #
  #       azurePowerShellVersion: LatestVersion
   #      errorActionPreference: continue
-
-#    - task: AzurePowerShell@4
- #     displayName: 'Deploy ADDC'
-  #    inputs:
-   #     azureSubscription: ${{ variables.azureSubscription }}
-    #    ScriptType: 'FilePath'
-     #   ScriptPath: ${{ variables.scriptroot }}\Deploy.ps1
-      #  ScriptArguments: '-DeploymentName ADDC-$(Build.BuildNumber)
-       #                   -TemplateFile ${{ variables.armroot }}\ADDC\deploy.json
-        #                  -ParametersFile ${{ variables.paramsroot }}\ADDC\${{ variables.paramsfileprefix }}.parameters.json
-         #                 -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\${{ variables.paramsfileprefix }}.parameters.json'
-#
- #       azurePowerShellVersion: LatestVersion
-  #      errorActionPreference: continue
-
 
 #    - task: AzurePowerShell@4
  #     displayName: 'Deploy STORAGE ACCOUNT'
@@ -158,7 +143,65 @@ stages:
          #                 -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\${{ variables.paramsfileprefix}}.parameters.json'
 #
  #       azurePowerShellVersion: LatestVersion
-  #      errorActionPreference: continue 
+  #      errorActionPreference: continue
+
+- stage: ADDC
+  displayName: 'Deploy ADDC'
+  dependsOn:
+  - BasicComponents
+  condition: 
+  variables:
+    environment: 'dev'
+
+
+  jobs:
+
+  - job: DeployADDC
+    displayName: 'Deploy ADDC'
+    condition: 
+    continueOnError: true
+    pool:
+      name: Hosted Windows 2019 with VS2019
+    steps:
+    - download: current
+      artifact: drop  
+
+
+#    - task: AzurePowerShell@4
+ #     displayName: 'Deploy ADDC'
+  #    inputs:
+   #     azureSubscription: ${{ variables.azureSubscription }}
+    #    ScriptType: 'FilePath'
+     #   ScriptPath: ${{ variables.scriptroot }}\Deploy.ps1
+      #  ScriptArguments: '-DeploymentName ADDC-$(Build.BuildNumber)
+       #                   -TemplateFile ${{ variables.armroot }}\ADDC\deploy.json
+        #                  -ParametersFile ${{ variables.paramsroot }}\ADDC\${{ variables.paramsfileprefix }}.parameters.json
+         #                 -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\${{ variables.paramsfileprefix }}.parameters.json'
+#
+ #       azurePowerShellVersion: LatestVersion
+  #      errorActionPreference: continue
+
+
+- stage: SQLVM
+  displayName: 'Deploy SQLVM'
+  dependsOn:
+  - ADDC
+  condition: 
+  variables:
+    environment: 'dev'
+
+
+  jobs:
+
+  - job: SQLVM
+    displayName: 'Deploy SQLVM'
+    condition: 
+    continueOnError: true
+    pool:
+      name: Hosted Windows 2019 with VS2019
+    steps:
+    - download: current
+      artifact: drop  
 
     - task: AzurePowerShell@4
       displayName: 'Deploy SQL VM1'
@@ -251,7 +294,28 @@ stages:
                           -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\${{ variables.paramsfileprefixdr}}.parameters.json'
 
         azurePowerShellVersion: LatestVersion
-        errorActionPreference: continue     
+        errorActionPreference: continue  
+
+- stage: AOAG
+  displayName: 'Deploy AOAG'
+  dependsOn:
+  - SQLVM
+  condition: 
+  variables:
+    environment: 'dev'
+
+
+  jobs:
+
+  - job: AOAG
+    displayName: 'Deploy AOAG'
+    condition: 
+    continueOnError: true
+    pool:
+      name: Hosted Windows 2019 with VS2019
+    steps:
+    - download: current
+      artifact: drop     
 
 #    - task: AzurePowerShell@4
  #     displayName: 'Always On Availibility Group'
@@ -266,6 +330,27 @@ stages:
 #
  #       azurePowerShellVersion: LatestVersion
   #      errorActionPreference: continue
+
+- stage: AOListener
+  displayName: 'Deploy AOListener'
+  dependsOn:
+  - AOAG
+  condition: 
+  variables:
+    environment: 'dev'
+
+
+  jobs:
+
+  - job: AOListener
+    displayName: 'Deploy AOListener'
+    condition: 
+    continueOnError: true
+    pool:
+      name: Hosted Windows 2019 with VS2019
+    steps:
+    - download: current
+      artifact: drop
 
 #    - task: AzurePowerShell@4
  #     displayName: 'Always On Listener'
