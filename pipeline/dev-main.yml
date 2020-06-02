@@ -251,7 +251,7 @@ stages:
         azureSubscription: ${{ variables.azureSubscription }}
         ScriptType: 'FilePath'
         ScriptPath: ${{ variables.scriptroot }}\create-attach-NSG.ps1
-        Scriptarguments: '-ParametersFile ${{ variables.paramsroot }}\VMdr\${{ variables.paramsfileprefix}}.attachnsg.json'
+        Scriptarguments: '-ParametersFile ${{ variables.paramsroot }}\VM1\${{ variables.paramsfileprefix}}.attachnsg.json'
  
         azurePowerShellVersion: LatestVersion
         errorActionPreference: continue
