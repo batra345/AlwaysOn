@@ -210,7 +210,7 @@ stages:
         ScriptType: 'FilePath'
         ScriptPath: ${{ variables.scriptroot }}\Deploy.ps1
         ScriptArguments: '-DeploymentName SQLVM1-$(Build.BuildNumber)
-                          -TemplateFile ${{ variables.armroot }}\VM\.deploy.json
+                          -TemplateFile ${{ variables.armroot }}\VM\deploy.json
                           -ParametersFile ${{ variables.paramsroot }}\VM1\${{ variables.paramsfileprefix }}.parameters.json
                           -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\${{ variables.paramsfileprefix }}.parameters.json'
 
