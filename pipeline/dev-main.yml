@@ -101,49 +101,49 @@ stages:
   #      errorActionPreference: continue
 
 
-#    - task: AzurePowerShell@4
- #     displayName: 'Deploy KEY VAULT'
-  #    inputs:
-   #     azureSubscription: ${{ variables.azureSubscription }}
-    #    ScriptType: 'FilePath'
-     #   ScriptPath: ${{ variables.scriptroot }}\Deploy.ps1
-      #  ScriptArguments: '-DeploymentName KV-$(Build.BuildNumber)
-       #                   -TemplateFile ${{ variables.armroot }}\KV\deploy.json
-        #                  -ParametersFile ${{ variables.paramsroot }}\KV\${{ variables.paramsfileprefix }}.parameters.json
-         #                 -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\${{ variables.paramsfileprefix }}.parameters.json'
-#
- #       azurePowerShellVersion: LatestVersion
-  #      errorActionPreference: continue
+    - task: AzurePowerShell@4
+      displayName: 'Deploy KEY VAULT'
+      inputs:
+        azureSubscription: ${{ variables.azureSubscription }}
+        ScriptType: 'FilePath'
+        ScriptPath: ${{ variables.scriptroot }}\Deploy.ps1
+        ScriptArguments: '-DeploymentName KV-$(Build.BuildNumber)
+                          -TemplateFile ${{ variables.armroot }}\KV\deploy.json
+                          -ParametersFile ${{ variables.paramsroot }}\KV\${{ variables.paramsfileprefix }}.parameters.json
+                          -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\${{ variables.paramsfileprefix }}.parameters.json'
+
+        azurePowerShellVersion: LatestVersion
+        errorActionPreference: continue
 
 
 
-#    - task: AzurePowerShell@4
- #     displayName: 'Deploy Managed Availability Set'
-  #    inputs:
-   #     azureSubscription: ${{ variables.azureSubscription }}
-    #    ScriptType: 'FilePath'
-     #   ScriptPath: ${{ variables.scriptroot }}\Deploy.ps1
-      #  ScriptArguments: '-DeploymentName ASET-$(Build.BuildNumber)
-       #                   -TemplateFile ${{ variables.armroot }}\Aset\deploy.json
-        #                  -ParametersFile ${{ variables.paramsroot }}\Aset\${{ variables.paramsfileprefix }}.parameters.json
-         #                 -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\${{ variables.paramsfileprefix }}.parameters.json'
-#
- #       azurePowerShellVersion: LatestVersion
-  #      errorActionPreference: continue
+    - task: AzurePowerShell@4
+      displayName: 'Deploy Managed Availability Set'
+      inputs:
+        azureSubscription: ${{ variables.azureSubscription }}
+        ScriptType: 'FilePath'
+        ScriptPath: ${{ variables.scriptroot }}\Deploy.ps1
+        ScriptArguments: '-DeploymentName ASET-$(Build.BuildNumber)
+                          -TemplateFile ${{ variables.armroot }}\Aset\deploy.json
+                          -ParametersFile ${{ variables.paramsroot }}\Aset\${{ variables.paramsfileprefix }}.parameters.json
+                          -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\${{ variables.paramsfileprefix }}.parameters.json'
 
-#    - task: AzurePowerShell@4
- #     displayName: 'SQL HA - Load balancer'
-  #    inputs:
-   #     azureSubscription: ${{ variables.azureSubscription }}
-    #    ScriptType: 'FilePath'
-     #   ScriptPath: ${{ variables.scriptroot }}\deploy.ps1
-      #  ScriptArguments: '-DeploymentName LBdeploy-$(Build.BuildNumber)
-       #                   -TemplateFile ${{ variables.armroot }}\LB\deploy.json
-        #                  -ParametersFile ${{ variables.paramsroot }}\LB\${{ variables.paramsfileprefix}}.parameters.json
-         #                 -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\${{ variables.paramsfileprefix}}.parameters.json'
-#
- #       azurePowerShellVersion: LatestVersion
-  #      errorActionPreference: continue
+        azurePowerShellVersion: LatestVersion
+        errorActionPreference: continue
+
+    - task: AzurePowerShell@4
+      displayName: 'SQL HA - Load balancer'
+      inputs:
+        azureSubscription: ${{ variables.azureSubscription }}
+        ScriptType: 'FilePath'
+        ScriptPath: ${{ variables.scriptroot }}\deploy.ps1
+        ScriptArguments: '-DeploymentName LBdeploy-$(Build.BuildNumber)
+                          -TemplateFile ${{ variables.armroot }}\LB\deploy.json
+                          -ParametersFile ${{ variables.paramsroot }}\LB\${{ variables.paramsfileprefix}}.parameters.json
+                          -ResourceGroupParametersFile ${{ variables.paramsroot }}\ResourceGroup\${{ variables.paramsfileprefix}}.parameters.json'
+
+        azurePowerShellVersion: LatestVersion
+        errorActionPreference: continue
 
 - stage: ADDC
   displayName: 'Deploy ADDC'
