@@ -18,7 +18,7 @@
             "value": 1433
         },
         "ListenerIp": {
-            "value": "10.0.1.100"
+            "value": "10.10.10.100"
         },
         "existingVnetResourcegroup": {
             "value": "SQL-HA2"
