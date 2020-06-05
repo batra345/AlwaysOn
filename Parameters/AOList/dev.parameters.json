@@ -27,7 +27,7 @@
             "value": "SQL-HA2-vnet"
         },
         "existingSubnet": {
-            "value": "default"
+            "value": "SQL-HA2-sub"
         },
         "existingInternalLoadBalancer": {
             "value": "lbsqlha"
