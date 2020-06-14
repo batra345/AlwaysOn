@@ -21,10 +21,10 @@
             "value": "Generation1"
         },
         "subnetId": {
-            "value": "/subscriptions/f1e1bfe7-0ee3-4b16-ade2-902563794f64/resourceGroups/SQL-DR/providers/Microsoft.Network/virtualNetworks/sqldr-vnet/subnets/GatewaySubnet"
+            "value": "/subscriptions/<Subscription ID>/resourceGroups/SQL-DR/providers/Microsoft.Network/virtualNetworks/sqldr-vnet/subnets/GatewaySubnet"
         },
         "publicIpAddressId": {
-            "value": "/subscriptions/f1e1bfe7-0ee3-4b16-ade2-902563794f64/resourceGroups/SQL-DR/providers/Microsoft.Network/publicIPAddresses/ngw-pub"
+            "value": "/subscriptions/<Subscription ID>/resourceGroups/SQL-DR/providers/Microsoft.Network/publicIPAddresses/ngw-pub"
         }
     }
 }
