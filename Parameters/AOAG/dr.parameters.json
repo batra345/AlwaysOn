@@ -26,7 +26,7 @@
         "domainAccountPassword": {
             "reference": {
                 "keyVault": {
-                "id": "/subscriptions/f1e1bfe7-0ee3-4b16-ade2-902563794f64/resourceGroups/SQL-DR/providers/Microsoft.KeyVault/vaults/alwaysonkv02"
+                "id": "/subscriptions/<Subscription ID>/resourceGroups/SQL-DR/providers/Microsoft.KeyVault/vaults/alwaysonkv02"
                 },
             "secretName": "svcsql"
             }
@@ -37,7 +37,7 @@
         "sqlServicePassword": {
             "reference": {
                 "keyVault": {
-                "id": "/subscriptions/f1e1bfe7-0ee3-4b16-ade2-902563794f64/resourceGroups/SQL-DR/providers/Microsoft.KeyVault/vaults/alwaysonkv02"
+                "id": "/subscriptions/<Subscription ID>/resourceGroups/SQL-DR/providers/Microsoft.KeyVault/vaults/alwaysonkv02"
                 },
             "secretName": "svcsql"
             }
