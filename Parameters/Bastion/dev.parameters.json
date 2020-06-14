@@ -12,10 +12,10 @@
             "value": "BastionHost"
         },
         "subnetId": {
-            "value": "/subscriptions/f1e1bfe7-0ee3-4b16-ade2-902563794f64/resourceGroups/SQL-HA2/providers/Microsoft.Network/virtualNetworks/SQL-HA2-vnet/subnets/AzureBastionSubnet"
+            "value": "/subscriptions/<Subscription ID>/resourceGroups/SQL-HA2/providers/Microsoft.Network/virtualNetworks/SQL-HA2-vnet/subnets/AzureBastionSubnet"
         },
         "publicIpAddressId": {
-            "value": "/subscriptions/f1e1bfe7-0ee3-4b16-ade2-902563794f64/resourceGroups/SQL-HA2/providers/Microsoft.Network/publicIPAddresses/public-IP"
+            "value": "/subscriptions/<Subscription ID>/resourceGroups/SQL-HA2/providers/Microsoft.Network/publicIPAddresses/public-IP"
         }
     }
 }
