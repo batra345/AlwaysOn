@@ -18,7 +18,7 @@
       "adminPassword": {
           "reference": {
               "keyVault": {
-                "id": "/subscriptions/<Subscription ID>/resourceGroups/SQL-HA2/providers/Microsoft.KeyVault/vaults/alwaysonkv011"
+                "id":"/subscriptions/<Subscription ID>/resourceGroups/SQL-HA2/providers/Microsoft.KeyVault/vaults/alwaysonkv011"
               },
               "secretName": "sqladmin"
           }
